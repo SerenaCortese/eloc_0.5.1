@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}profile{% endblock %}
+
+{% block page_content %}
+    {% if user == current_user %}
+        <li><a href="{{ url_for('users_bp.edit_profile', name=current_user.username) }}">Edit Profile</a></li>
+    {% endif %}
+    {% if user.username %}
+        <img src="/static/photos/{{ user.picture_filename }}" height="80" width="80">
+        <div>{{ user.picture_filename }}</div>
+        <div>{{ user.name }}</div>
+        <div>{{ user.surname }}</div>
+        <div>{{ user.birth_date }}</div>
+        <div>{{ user.username }}</div>
+        {% if user.about_me %}
+            <div>{{ user.about_me }}</div>
+        {% endif %}
+        {% if user.type == 'tutor' %}
+            {% if user.degrees %}
+                <div>
+                    {% for d in user.degrees %}
+                        {{ d }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if user.subjects %}
+                <div>
+                    {% for d in user.subjects %}
+                        {{ d }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+        <!-- todo - insert the other tutor attributes ->
+    {% endif %}
+{% endblock  %}

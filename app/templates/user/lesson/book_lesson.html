@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}book lesson{% endblock %}
+
+{% block page_content %}
+    {% if tutor %}
+        {% if tutor.day_av_slots %}
+            {% for a in tutor.day_av_slots %}
+                <p>{{ a.week_day }} -
+                    {% if a.slot1 %} 7-8 {% endif %} {% if a.label %}8-9 {% endif %}
+                    {% if a.slot3 %}9-10 {% endif %} {% if a.slot4 %}10-11 {% endif %}
+                    {% if a.slot5 %}11-12 {% endif %} {% if a.slot6 %}12-13 {% endif %}
+                    {% if a.slot8 %}13-14 {% endif %} {% if a.slot9 %}14-15 {% endif %}
+                    {% if a.slot10 %}16-17 {% endif %} {% if a.slot11 %}17-18 {% endif %}
+                    {% if a.slot12 %}18-19 {% endif %}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+    <form method="post" action="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=tutor_username) }}">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend></legend>
+          <div class="form-group">
+              {{ form.subject.label }}
+              {{ form.subject }}
+              {% if form.subject.errors %}
+                  {% for err in form.subject.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+
+              {{ form.day.label }}
+              {{ form.day }}
+              {% if form.day.errors %}
+                  {% for err in form.day.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {% if not form.day.errors %}
+                      <span>format: yyyy-mm-dd</span>
+              {% endif %}
+
+              {{ form.time.label }}
+              {{ form.time }}
+              {% if form.time.errors %}
+                  {% for err in form.time.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.submit }}
+          </div>
+      </fieldset>
+    </form>
+{% endblock  %}

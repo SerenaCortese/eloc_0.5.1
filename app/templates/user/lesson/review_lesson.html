@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}review lesson{% endblock %}
+
+{% block page_content %}
+    <form method="post" action="{{ url_for('users_bp.review_lesson', username=current_user.username, lesson=lesson) }}">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+          <legend></legend>
+          <div class="form-group">
+              {{ form.comment.label }}
+              {{ form.comment }}
+              {% if form.comment.errors %}
+                  {% for err in form.comment.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+            <div class="form-group">
+              {{ form.score.label }}
+              {{ form.score }}
+              {% if form.score.errors %}
+                  {% for err in form.score.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+        <div class="form-group">
+            {{ form.submit }}
+        </div>
+      </fieldset>
+    </form>
+
+{% endblock  %}

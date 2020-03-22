@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}registration{% endblock %}
+
+{% block page_content %}
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ url_for('auth.stud_reg') }}">Student</a></li>
+    <li><a href="{{ url_for('auth.tutor_reg') }}">Tutor</a></li>
+    </ul>
+{% endblock  %}

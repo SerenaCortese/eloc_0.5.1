@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}search{% endblock %}
+
+{% block page_content %}
+    <form method="post" action="{{ url_for('main.search') }}">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend></legend>
+          <div class="form-group">
+              {{ form.subject.label }}
+              {{ form.subject }}
+              {% if form.subject.errors %}
+                  {% for err in form.subject.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.submit }}
+          </div>
+      </fieldset>
+    </form>
+    {% if tutors %}
+        {% for t in tutors %}
+            <div>
+            {{ t.username }}
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('users_bp.book_lesson', tutor_username=t.username, username=current_user.username) }}">book lesson</a>
+            {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock  %}

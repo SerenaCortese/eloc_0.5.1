@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}tutor - pending lessons{% endblock %}
+
+{% block page_content %}
+    <p>tutor - pending lessons view</p>
+
+    {% if lessons %}
+        {% for l in lessons %}
+            <p>{{ l.subject_name }} - {{ l.date }}</p>
+        {% endfor %}
+    {% endif %}
+
+{% endblock  %}

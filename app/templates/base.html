@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block title %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('main.home') }}">Home</a></li>
+        <li><a href="{{ url_for('main.search') }}">Search</a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('users_bp.profile', username=current_user.username) }}">Profile</a></li>
+
+            <li><a href="{{ url_for('users_bp.stud_pend_lessons', username=current_user.username) }}">Pending Lessons(student)</a></li>
+            <li><a href="{{ url_for('users_bp.stud_past_lessons', username=current_user.username) }}">Past Lessons(student)</a></li>
+            <li><a href="{{ url_for('users_bp.done_reviews', username=current_user.username) }}">Reviews(student)</a></li>
+
+            {% if current_user.type == 'tutor' %}
+                <li><a href="{{ url_for('users_bp.tutor_pend_lessons', username=current_user.username) }}">Pending Lessons(tutor)</a></li>
+                <li><a href="{{ url_for('users_bp.tutor_past_lessons', username=current_user.username) }}">Past Lessons(tutor)</a></li>
+                <li><a href="{{ url_for('users_bp.gotten_reviews', username=current_user.username) }}">Reviews(tutor)</a></li>
+            {% endif %}
+
+            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+        {% else %}
+            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+            <li><a href="{{ url_for('auth.reg') }}">Register</a></li>
+        {% endif %}
+    </ul>
+
+   {% if current_user.is_authenticated %}
+       <p>notifications</p>
+       {% if unreviewed_stud_lessons %}
+           <p>student</p>
+           {% for l in unreviewed_stud_lessons %}
+               <div>{{ l.subject_name }}</div>
+           {% endfor %}
+       {% endif %}
+       {% if reviewed_lessons and current_user.type == 'tutor' %}
+           <p>tutor</p>
+           {% for l in reviewed_lessons %}
+               <div>{{ l.subject_name }}</div>
+           {% endfor %}
+       {% endif %}
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    {% block page_content %}{% endblock  %}
+
+</body>
+</html>
+
+
+
+

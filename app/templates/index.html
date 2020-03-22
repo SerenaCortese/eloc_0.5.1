@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}home{% endblock %}
+
+{% block page_content %}
+    {% if tutors %}
+        {% for t in tutors %}
+            <div>
+            {{ t.username }}
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=t.username) }}">book lesson</a>
+            {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock  %}

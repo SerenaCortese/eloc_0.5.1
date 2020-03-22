@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Register - tutor{% endblock %}
+
+{% block page_content %}
+    <form method="post" action="{{ url_for('auth.tutor_reg') }}">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend></legend>
+          <div class="form-group">
+              {{ form.profile_picture.label }}
+              {{ form.profile_picture }}
+              {% if form.profile_picture.errors %}
+                  {% for err in form.profile_picture.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.name.label }}
+              {{ form.name }}
+              {% if form.name.errors %}
+                  {% for err in form.name.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.surname.label }}
+              {{ form.surname }}
+              {% if form.surname.errors %}
+                  {% for err in form.surname.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.birth_date.label }}
+              {{ form.birth_date }}
+              {% if form.birth_date.errors %}
+                  {% for err in form.birth_date.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.email.label }}
+              {{ form.email }}
+              {% if form.email.errors %}
+                  {% for err in form.email.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.username.label }}
+              {{ form.username }}
+              {% if form.username.errors %}
+                  {% for err in form.username.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.password.label }}
+              {{ form.password }}
+              {% if form.password.errors %}
+                  {% for err in form.password.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.password2.label }}
+              {{ form.password2 }}
+              {% if form.password2.errors %}
+                  {% for err in form.password2.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.degrees.label }}
+              {{ form.degrees }}
+              {% if form.degrees.errors %}
+                  {% for err in form.degrees.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.subjects.label }}
+              {{ form.subjects }}
+              {% if form.subjects.errors %}
+                  {% for err in form.subjects.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.about_me.label }}
+              {{ form.about_me }}
+              {% if form.about_me.errors %}
+                  {% for err in form.about_me.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.pay_rate.label }}
+              {{ form.pay_rate }}
+              {% if form.pay_rate.errors %}
+                  {% for err in form.pay_rate.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.mon_av_hours_slot.label }}
+              {{ form.mon_av_hours_slot }}
+              {% if form.mon_av_hours_slot.errors %}
+                  {% for err in form.mon_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.tue_av_hours_slot.label }}
+              {{ form.tue_av_hours_slot }}
+              {% if form.tue_av_hours_slot.errors %}
+                  {% for err in form.tue_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.wed_av_hours_slot.label }}
+              {{ form.wed_av_hours_slot }}
+              {% if form.wed_av_hours_slot.errors %}
+                  {% for err in form.wed_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.thu_av_hours_slot.label }}
+              {{ form.thu_av_hours_slot }}
+              {% if form.thu_av_hours_slot.errors %}
+                  {% for err in form.thu_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.fri_av_hours_slot.label }}
+              {{ form.fri_av_hours_slot }}
+              {% if form.fri_av_hours_slot.errors %}
+                  {% for err in form.fri_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.sat_av_hours_slot.label }}
+              {{ form.sat_av_hours_slot }}
+              {% if form.sat_av_hours_slot.errors %}
+                  {% for err in form.sat_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+              {{ form.sun_av_hours_slot.label }}
+              {{ form.sun_av_hours_slot }}
+              {% if form.sun_av_hours_slot.errors %}
+                  {% for err in form.sun_av_hours_slot.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.submit }}
+          </div>
+      </fieldset>
+    </form>
+
+{% endblock %}

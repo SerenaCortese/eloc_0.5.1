@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Register - student{% endblock %}
+
+{% block page_content %}
+
+    <form method="post" action="{{ url_for('auth.stud_reg') }}" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+          <legend></legend>
+          <div class="form-group">
+              {{ form.profile_picture.label }}
+              {{ form.profile_picture }}
+              {% if form.profile_picture.errors %}
+                  {% for err in form.profile_picture.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.name.label }}
+              {{ form.name }}
+              {% if form.name.errors %}
+                  {% for err in form.name.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.surname.label }}
+              {{ form.surname }}
+              {% if form.surname.errors %}
+                  {% for err in form.surname.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.birth_date.label }}
+              {{ form.birth_date }}
+              {% if form.birth_date.errors %}
+                  {% for err in form.birth_date.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.email.label }}
+              {{ form.email }}
+              {% if form.email.errors %}
+                  {% for err in form.email.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.username.label }}
+              {{ form.username }}
+              {% if form.username.errors %}
+                  {% for err in form.username.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.about_me.label }}
+              {{ form.about_me }}
+              {% if form.about_me.errors %}
+                  {% for err in form.about_me.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.password.label }}
+              {{ form.password }}
+              {% if form.password.errors %}
+                  {% for err in form.password.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.password2.label }}
+              {{ form.password2 }}
+              {% if form.password2.errors %}
+                  {% for err in form.password2.errors %}
+                      <span>{{ err }}</span>
+                  {% endfor %}
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.submit }}
+          </div>
+      </fieldset>
+    </form>
+
+{% endblock %}

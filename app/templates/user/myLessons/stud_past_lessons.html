@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}stud - past lessons{% endblock %}
+
+{% block page_content %}
+    <p>stud - past lessons view</p>
+
+    {% if lessons %}
+        {% for l in lessons %}
+            <div>{{ l.subject_name }} - {{ l.date }} <a href="{{ url_for('users_bp.review_lesson', username=current_user.username, lesson=l) }}">Review(student)</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock  %}
