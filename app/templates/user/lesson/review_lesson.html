@@ -2,32 +2,34 @@
 {% block title %}review lesson{% endblock %}
 
 {% block page_content %}
-    <form method="post" action="{{ url_for('users_bp.review_lesson', username=current_user.username, lesson=lesson) }}">
+    <form method="post" action="/user/{{current_user.username}}/review_lesson/{{lesson_id}}">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
           <legend></legend>
-          <div class="form-group">
-              {{ form.comment.label }}
-              {{ form.comment }}
+        <div class="row">
+          <div class="col">
+              {{ form.comment.label }}:
+              {{ form.comment(class="form-control") }}
               {% if form.comment.errors %}
                   {% for err in form.comment.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
           </div>
-            <div class="form-group">
-              {{ form.score.label }}
-              {{ form.score }}
+            <div class="col">
+              {{ form.score.label }}:
+              {{ form.score(class="form-control", placeholder="A number within 1 and 10") }}
               {% if form.score.errors %}
                   {% for err in form.score.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
           </div>
-        <div class="form-group">
-            {{ form.submit }}
+            </div>
+        <div class="row">
+                    <div class="col">
+            {{ form.submit(class="btn btn-outline-success") }}
         </div>
-      </fieldset>
+        </div>
     </form>
 
 {% endblock  %}

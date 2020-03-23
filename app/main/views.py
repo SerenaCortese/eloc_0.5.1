@@ -5,7 +5,8 @@ from app import db
 from app.main.forms import SearchForm
 from app.myUtils import checkForStudReviews, checkForTutReviews
 from . import main
-from ..models import Degree, Subject, Tutor, City
+from ..models import Degree, Subject, Tutor, City, User, Lesson
+from datetime import date
 
 
 @main.before_app_first_request
@@ -20,6 +21,7 @@ def populate_db():
 @main.route('/', methods=['GET', 'POST'])
 def home(): #todo - moidfy the func scope
     tutors = Tutor.query.all()
+
 
     return render_template('index.html', tutors=tutors,
                            unreviewed_stud_lessons = checkForStudReviews(current_user),
@@ -46,6 +48,7 @@ def search():
     if form.validate_on_submit():
         subject = Subject.query.filter_by(id=form.subject.data).first()
         selected_tutors = subject.tutors
+        print str(subject.tutors)
 
         #render only the users for that city
         if City is not None:

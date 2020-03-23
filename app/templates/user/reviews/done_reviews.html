@@ -2,5 +2,111 @@
 {% block title %}done review{% endblock %}
 
 {% block page_content %}
-    <p> done reviews view</p>
-{% endblock  %}
+
+{% if not reviews %}
+<p class="alert-danger"> There are no reviews</p>
+{% endif %}
+
+{% if reviews %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <table class="table table-hover">
+  <thead>
+    <tr>
+                <th scope="col">Tutor</th>
+
+    </tr>
+  </thead>
+                <tbody>
+                {%for t in tutors%}
+                <tr>
+                    <td>
+                        <a href="/user/{{t.username}}">{{t.username}}</a>
+                    </td>
+                </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+            </table>
+
+
+
+        </div>
+
+
+         <div class="col">
+
+
+
+
+                        <table class="table table-hover">
+  <thead>
+    <tr>
+                <th scope="col">Date</th>
+        <th>Subject</th>
+
+    </tr>
+  </thead>
+                <tbody>
+            {%for l in lessons%}
+            <tr>
+                <td>
+                    {{l.date}}
+                </td>
+                <td>
+                    {{l.subject_name}}
+                </td>
+            </tr>
+
+
+
+            {%endfor%}
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div class="col">
+
+            <table class="table table-hover">
+               <thead>
+               <tr>
+                   <th scope="col">Comment</th>
+                   <th scope="col">Score</th>
+               </tr>
+               </thead>
+                <tbody>
+                {%for r in reviews %}
+                <tr>
+                    <td>
+                        {{r.comment}}
+                    </td>
+                    <td>
+                        {{r.score}}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock  page_content %}

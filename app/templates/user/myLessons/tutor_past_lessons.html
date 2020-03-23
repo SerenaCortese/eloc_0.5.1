@@ -2,11 +2,33 @@
 {% block title %}tutor - past lessons{% endblock %}
 
 {% block page_content %}
-    <p>tutor - past lessons view</p>
 
-    {% if lessons %}
-        {% for l in lessons %}
-            <p>{{ l.subject_name }} - {{ l.date }}</p>
-        {% endfor %}
-    {% endif %}
+
+{% if not lessons %}
+<p class="alert-danger">There are no attended lessons</p>
+{% endif%}
+{% if  lessons %}
+<div class="container">
+    <div class="row">
+
+        <div class="col">
+
+
+
+
+
+        </div>
+
+
+        <div class="col">
+
+
+        </div>
+
+    </div>
+
+</div>
+{% endif%}
+
+
 {% endblock  %}

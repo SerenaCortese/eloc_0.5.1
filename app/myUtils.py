@@ -19,6 +19,7 @@ day_slots = [('1', '07:00 - 08:00'),
              ('11', '17:00 - 18:00'),
              ('12','18:00 - 19:00')]
 
+
 def set_AvSlotsLists(formDaySlots, new_tutor):
     if formDaySlots.data:
         new_AvSlotsList = AvSlotsList(week_day=str(formDaySlots.label.text))

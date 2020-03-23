@@ -2,8 +2,29 @@
 {% block title %}registration{% endblock %}
 
 {% block page_content %}
-    <ul class="nav navbar-nav navbar-right">
-    <li><a href="{{ url_for('auth.stud_reg') }}">Student</a></li>
-    <li><a href="{{ url_for('auth.tutor_reg') }}">Tutor</a></li>
-    </ul>
+<div class="container">
+    <div class="row">
+
+        <div class="col-2">
+    <div class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-success my-2 my-sm-0">
+            <a class="btn-outline-success" href="{{ url_for('auth.stud_reg') }}">
+                Student
+            </a>
+        </button>
+    </div>
+        </div>
+        <div class="col">
+  <div class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-success my-2 my-sm-0">
+            <a class="btn-outline-success" href="{{ url_for('auth.tutor_reg') }}">
+                Tutor
+            </a>
+        </button>
+    </div>
+        </div>
+
+        </div>
+</div>
+
 {% endblock  %}

@@ -84,6 +84,7 @@ def book_lesson(username, tutor_username):
             tutor.lessons_tutored.append(new_lesson)
             db.session.commit()
 
+
             flash('You booked the lesson mate!')
             return redirect(url_for('users_bp.lesson_payment', username=current_user.username))
 
@@ -100,14 +101,24 @@ def lesson_payment(username):
 @login_required
 def stud_pend_lessons(username):
     lessons = User.query.filter_by(username=username).first().get_stud_pend_lessons_attended()
-    return render_template('/user/myLessons/stud_pend_lessons.html', lessons=lessons)
+
+    tutor_usernames =[]
+    for l in lessons:
+        tutor_usernames.append(Tutor.query.filter_by(id=l.tutor_id).first().username)
+
+    return render_template('/user/myLessons/stud_pend_lessons.html', lessons=lessons, tutor_usernames=tutor_usernames)
 
 @users_bp.route('/user/<username>/stud_past_lessons', methods=['GET', 'POST'])
 @login_required
 def stud_past_lessons(username):
     lessons = User.query.filter_by(username=username).first().get_stud_past_lessons_attended()
-    User.query.filter_by(username=username).first().dontRemindMe()
-    return render_template('/user/myLessons/stud_past_lessons.html', lessons=lessons)
+    #User.query.filter_by(username=username).first().dontRemindMe()
+    tut_usernames = []
+    dict = {}
+    for l in lessons:
+        tut_usernames.append(Tutor.query.filter_by(id=l.tutor_id).first().username)
+
+    return render_template('/user/myLessons/stud_past_lessons.html', lessons=lessons, tut_usernames= tut_usernames)
 
 @users_bp.route('/user/<username>/tutor_pend_lessons', methods=['GET', 'POST'])
 @login_required
@@ -125,25 +136,35 @@ def tutor_past_lessons(username):
         lessons = Tutor.query.filter_by(username=username).first().get_tutor_past_lessons()
     return render_template('/user/myLessons/tutor_past_lessons.html', lessons=lessons)
 
-@users_bp.route('/user/<username>/review_lesson', methods=['GET', 'POST'])
+@users_bp.route('/user/<username>/review_lesson/<lesson_id>', methods=['GET', 'POST'])
 @login_required
-def review_lesson(username, lesson):
+def review_lesson(username, lesson_id):
     form = ReviewForm()
     if form.validate_on_submit():
-        new_review = Review(comment=form.comment.data, score=form.score.data, lesson_id=lesson.id)
+        #todo - implement controls
+        new_review = Review(comment=form.comment.data, score=form.score.data, lesson_id=lesson_id)
         db.session.add(new_review)
-        new_notification = Notification(lesson_id=lesson.id)
+        new_notification = Notification(lesson_id=lesson_id)
         db.session.add(new_notification)
         db.session.commit()
         flash('The lesson has been reviewed')
         return redirect(url_for('main.home'))
 
-    return render_template('/user/lesson/review_lesson.html')
+    return render_template('/user/lesson/review_lesson.html', form=form, lesson_id=lesson_id)
 
 @users_bp.route('/user/<username>/done_reviews', methods=['GET', 'POST'])
 @login_required
 def done_reviews(username):
-    return render_template('/user/reviews/done_reviews.html')
+
+    attended_lessons = User.query.filter_by(username=username).first().get_stud_past_lessons_attended()
+    tutors = []
+    reviews = []
+    for l in attended_lessons:
+        reviews.append(l.review)
+        tutors.append(Tutor.query.filter_by(id=l.tutor_id).first())
+
+
+    return render_template('/user/reviews/done_reviews.html', lessons=attended_lessons, reviews=reviews, tutors=tutors)
 
 @users_bp.route('/user/<username>/gotten_reviews', methods=['GET', 'POST'])
 @login_required

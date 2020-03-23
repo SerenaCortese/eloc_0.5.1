@@ -15,8 +15,8 @@ from ..myUtils import day_slots
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Keep me logged in')
-    submit = SubmitField('Log In')
+    remember_me = BooleanField('Keep me in')
+    submit = SubmitField('Login')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first() is None:

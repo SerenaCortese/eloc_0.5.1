@@ -3,182 +3,254 @@
 {% block title %}Register - tutor{% endblock %}
 
 {% block page_content %}
-    <form method="post" action="{{ url_for('auth.tutor_reg') }}" enctype="multipart/form-data">
-      {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-          <legend></legend>
-          <div class="form-group">
-              {{ form.profile_picture.label }}
-              {{ form.profile_picture }}
-              {% if form.profile_picture.errors %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+    <div class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-success my-2 my-sm-0">
+            <a class="btn-outline-success" href="{{ url_for('auth.stud_reg') }}">
+                Student
+            </a>
+        </button>
+    </div>
+        </div>
+        <div class="col">
+  <div class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-success my-2 my-sm-0">
+            <a class="btn-outline-success" href="{{ url_for('auth.tutor_reg') }}">
+                Tutor
+            </a>
+        </button>
+    </div>
+        </div>
+
+        </div>
+</div>
+
+
+<form method="post" action="{{ url_for('auth.tutor_reg') }}" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="row">
+        <div class="col">
+        {{ form.profile_picture(class="form-control-file", id="exampleFormControlFile1") }}
+        </div>
+    </div>
+    {% if form.profile_picture.errors %}
                   {% for err in form.profile_picture.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.name.label }}
-              {{ form.name }}
-              {% if form.name.errors %}
+  <div class="row">
+    <div class="col">
+      {{ form.name(class="form-control", placeholder="name") }}
+    </div>
+    <div class="col">
+      {{ form.surname(class="form-control", placeholder="surname") }}
+    </div>
+  </div>
+    <div class="row">
+         {% if form.name.errors %}
                   {% for err in form.name.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.surname.label }}
-              {{ form.surname }}
-              {% if form.surname.errors %}
+         {% if form.surname.errors %}
                   {% for err in form.surname.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
+    </div>
+    <div class="row">
+          <div class="col">
+              {{ form.birth_date(class="form-control",placeholder="YYYY-MM-DD")}}
           </div>
-          <div class="form-group">
-              {{ form.birth_date.label }}
-              {{ form.birth_date }}
-              {% if form.birth_date.errors %}
-                  {% for err in form.birth_date.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.city.label }}
+          <div class="col">
               {{ form.city }}
-              {% if form.city.errors %}
+          </div>
+      </div>
+    <div class="row">
+         {% if form.birth_date.errors %}
+                  {% for err in form.birth_date.errors %}
+                      <div class="col alert-danger">{{ err }}</div>
+                  {% endfor %}
+              {% endif %}
+        {% if form.city.errors %}
                   {% for err in form.city.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
+    </div>
+
+       <div class="row">
+          <div class="col">
+              {{ form.email(class="form-control",placeholder="email")}}
           </div>
-          <div class="form-group">
-              {{ form.email.label }}
-              {{ form.email }}
-              {% if form.email.errors %}
+          <div class="col">
+              {{ form.username(class="form-control",placeholder="username")}}
+          </div>
+      </div>
+    <div class="row">
+
+        {% if form.email.errors %}
                   {% for err in form.email.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.username.label }}
-              {{ form.username }}
-              {% if form.username.errors %}
+         {% if form.username.errors %}
                   {% for err in form.username.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
+
+    </div>
+
+
+    <div class="row">
+          <div class="col">
+              {{ form.password(class="form-control",placeholder="password")}}
           </div>
-          <div class="form-group">
-              {{ form.password.label }}
-              {{ form.password }}
-              {% if form.password.errors %}
+          <div class="col">
+              {{ form.password2(class="form-control",placeholder="confirm password")}}
+          </div>
+      </div>
+    <div class="row">
+    {% if form.password.errors %}
                   {% for err in form.password.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.password2.label }}
-              {{ form.password2 }}
-              {% if form.password2.errors %}
+
+        {% if form.password2.errors %}
                   {% for err in form.password2.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.degrees.label }}
-              {{ form.degrees }}
-              {% if form.degrees.errors %}
-                  {% for err in form.degrees.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.subjects.label }}
-              {{ form.subjects }}
-              {% if form.subjects.errors %}
-                  {% for err in form.subjects.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.about_me.label }}
-              {{ form.about_me }}
-              {% if form.about_me.errors %}
+
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col">
+            {{ form.about_me(placeholder="about me", class="form-control") }}
+        </div>
+    </div>
+    <div class="row">
+        {% if form.about_me.errors %}
                   {% for err in form.about_me.errors %}
-                      <span>{{ err }}</span>
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.pay_rate.label }}
-              {{ form.pay_rate }}
-              {% if form.pay_rate.errors %}
-                  {% for err in form.pay_rate.errors %}
-                      <span>{{ err }}</span>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col">
+            {{ form.degrees.label }}:
+            {{ form.degrees }}
+        </div>
+        <div class="col">
+            {{ form.subjects.label }}:
+            {{ form.subjects }}
+        </div>
+    </div>
+    <div class="row">
+        {% if form.degrees.errors %}
+                  {% for err in form.degrees.errors %}
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.mon_av_hours_slot.label }}
-              {{ form.mon_av_hours_slot }}
-              {% if form.mon_av_hours_slot.errors %}
-                  {% for err in form.mon_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
+        {% if form.subjects.errors %}
+                  {% for err in form.subjects.errors %}
+                      <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-              {{ form.tue_av_hours_slot.label }}
-              {{ form.tue_av_hours_slot }}
-              {% if form.tue_av_hours_slot.errors %}
-                  {% for err in form.tue_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-              {{ form.wed_av_hours_slot.label }}
-              {{ form.wed_av_hours_slot }}
-              {% if form.wed_av_hours_slot.errors %}
-                  {% for err in form.wed_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-              {{ form.thu_av_hours_slot.label }}
-              {{ form.thu_av_hours_slot }}
-              {% if form.thu_av_hours_slot.errors %}
-                  {% for err in form.thu_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-              {{ form.fri_av_hours_slot.label }}
-              {{ form.fri_av_hours_slot }}
-              {% if form.fri_av_hours_slot.errors %}
-                  {% for err in form.fri_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-              {{ form.sat_av_hours_slot.label }}
-              {{ form.sat_av_hours_slot }}
-              {% if form.sat_av_hours_slot.errors %}
-                  {% for err in form.sat_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-              {{ form.sun_av_hours_slot.label }}
-              {{ form.sun_av_hours_slot }}
-              {% if form.sun_av_hours_slot.errors %}
-                  {% for err in form.sun_av_hours_slot.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.submit }}
-          </div>
-      </fieldset>
-    </form>
+
+    </div>
+
+<!-- todo - eventually add controls on the time slots-->
+
+    Available on:
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                {{ form.mon_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.mon_av_hours_slot }}
+            </div>
+        </div>
+        <div class="col">
+           <div class="row">
+                {{ form.tue_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.tue_av_hours_slot }}
+            </div>
+        </div>
+        <div class="col">
+           <div class="row">
+                {{ form.wed_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.wed_av_hours_slot }}
+            </div>
+        </div>
+        <div class="col">
+           <div class="row">
+                {{ form.thu_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.thu_av_hours_slot }}
+            </div>
+        </div>
+    </div>
+        <div class="row">
+             <div class="col">
+           <div class="row">
+                {{ form.fri_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.fri_av_hours_slot }}
+            </div>
+        </div>
+             <div class="col">
+           <div class="row">
+                {{ form.sat_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.sat_av_hours_slot }}
+            </div>
+        </div>
+             <div class="col">
+           <div class="row">
+                {{ form.sun_av_hours_slot.label }}:
+            </div>
+            <div class="row">
+                {{ form.sun_av_hours_slot }}
+            </div>
+        </div>
+        </div>
+    <div class="row">
+        {{ form.pay_rate.label }}:
+        {{ form.pay_rate(placeholder="XX.XX") }}
+    </div>
+
+    <div class="row">
+        {{form.submit(class="btn btn-outline-success")}}
+    </div>
+
+    </div>
+
+
+</form>
+
+
+
 
 {% endblock %}

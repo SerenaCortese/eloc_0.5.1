@@ -70,21 +70,21 @@
                         <span class="badge badge-light">0</span>
                     {% endif %}
                     {% if unreviewed_stud_lessons %}
-                        <span class="badge badge-light">{{unreviewed_stud_lessons.count()}}</span>
+
                     {% endif %}
                 {% endif %}
                 {% if current_user.type == 'tutor' %}
                     {% if unreviewed_stud_lessons and  reviewed_lessons%}
-                        <span class="badge badge-light">{{unreviewed_stud_lessons.count() + reviewed_lessons.count()}}</span>
+
                     {% endif %}
                     {% if not unreviewed_stud_lessons and  not reviewed_lessons%}
                         <span class="badge badge-light text-success">0</span>
                     {% endif %}
                     {% if unreviewed_stud_lessons and not reviewed_lessons%}
-                        <span class="badge badge-light">{{unreviewed_stud_lessons.count() }}</span>
+
                     {% endif %}
                     {% if notunreviewed_stud_lessons and  reviewed_lessons%}
-                        <span class="badge badge-light">{{reviewed_lessons.count() }}</span>
+
                     {% endif %}
                 {% endif %}
             </button>

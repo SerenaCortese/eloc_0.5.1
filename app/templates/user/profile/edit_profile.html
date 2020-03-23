@@ -6,21 +6,21 @@
 
     <form method="post" action="{{ url_for('users_bp.edit_profile', name=current_user.username) }}">
       {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-          <legend></legend>
-          <div class="form-group">
-              {{ form.username.label }}
-              {{ form.username }}
+        <div class="row">
+            <div class="col">
+          <div class="row">
+              {{ form.username.label }}:
+              {{ form.username(class="form-control") }}
           </div>
-          <div class="form-group">
+          <div class="row">
               {{ form.about_me.label }}
-              {{ form.about_me }}
+              {{ form.about_me(class="form-control") }}
           </div>
-          <div class="form-group">
-              {{ form.submit }}
+          <div class="row">
+              {{ form.submit(class="btn btn-outline-success")}}
           </div>
-          <!-- todo - insert the other attributes ->
-      </fieldset>
+                </div>
+            </div>
     </form>
 
 {% endblock %}
