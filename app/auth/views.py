@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from . import auth
 from .forms import LoginForm, StudRegFrom, TutorRegForm
 from ..__init__ import db  # todo - check if it is the right istance of db
-from ..models import User, Student, Subject, Degree, Tutor
+from ..models import User, Student, Subject, Degree, Tutor, City
 from ..myUtils import set_AvSlotsLists
 
 
@@ -38,6 +38,11 @@ def reg():
 @auth.route('/registration/stud_reg', methods=['GET', 'POST'])
 def stud_reg():
     form = StudRegFrom()
+
+    #populate form filed
+    db_cities = City.query.order_by('name').all()
+    form.city.choices = [(g.id, g.name) for g in db_cities]
+
     if form.validate_on_submit():
         f = form.profile_picture.data
         filename = secure_filename(f.filename)
@@ -47,6 +52,10 @@ def stud_reg():
         new_student = Student(email=form.email.data, username=form.username.data, password=form.password.data,
                               about_me=form.about_me.data, name=form.name.data, surname=form.surname.data,
                               birth_date=form.birth_date.data, picture_filename=filename)
+
+        city = City.query.filter_by(id=form.city.data)
+        city.append(new_student)
+
         db.session.add(new_student)
         db.session.commit()
         flash('You have succesfully registred as a student.')
@@ -65,8 +74,10 @@ def tutor_reg():
     #populate form fileds
     db_degrees = Degree.query.order_by('name').all()
     db_subjects = Subject.query.order_by('name').all()
+    db_cities = City.query.order_by('name').all()
     form.degrees.choices = [(g.id, g.name) for g in db_degrees]
     form.subjects.choices = [(g.id, g.name) for g in db_subjects]
+    form.city.choices = [(g.id, g.name) for g in db_cities]
 
     if form.validate_on_submit():
         f = form.profile_picture.data
@@ -97,6 +108,9 @@ def tutor_reg():
         for s in form.subjects.data:
             subject = Subject.query.filter_by(id=s).first()
             subject.tutors.append(new_tutor)
+
+        city = City.query.filter_by(id=form.city.data)
+        city.append(new_tutor)
 
         db.session.commit()
 

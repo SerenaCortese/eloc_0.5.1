@@ -3,7 +3,7 @@ from datetime import date
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, \
-    SubmitField, SelectMultipleField, TextAreaField, FloatField, DateField
+    SubmitField, SelectMultipleField, TextAreaField, FloatField, DateField, SelectField
 from wtforms import ValidationError
 from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo
 
@@ -36,6 +36,7 @@ class StudRegFrom(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(1,64)])#todo - add regex
     surname = StringField('surname', validators=[DataRequired(), Length(1,64)])#todo - add regex
     birth_date = DateField('birth date')
+    city = SelectField('City', validators=[DataRequired], coerce=int)
     password = PasswordField('Password', validators=[DataRequired(),
                                                      EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
@@ -53,6 +54,9 @@ class StudRegFrom(FlaskForm):
     def validate_birth_date(self, field):#todo - add further controls
         if field.data>date.today():
             raise ValidationError('you can not be born in the future')
+
+    def validate_city(self, field):#todo - eventually implement controls
+        pass
 
 class TutorRegForm(StudRegFrom):
     degrees = SelectMultipleField(coerce=int)#degrees is a list of db.degree.id

@@ -31,6 +31,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
 
     lessons_attended = db.relationship('Lesson', backref='User', lazy='dynamic')
+    city_id = db.Column(db.Integer, db.ForeignKey('cities.id'))
 
     type = db.Column(db.String(50))
     __mapper_args__ = {
@@ -292,3 +293,21 @@ class Notification(db.Model):
     notification_id = db.Column(db.Integer, primary_key=True)
 
     lesson_id = db.Column(db.Integer(), db.ForeignKey('lessons.id'), unique=True)
+
+class City(db.Model):#there is no need for a table with only a string attribute
+     #but it could be useful having the users groupeb by city and for future developments
+    __tablename__ = 'cities'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+
+    users = db.relationship('User', backref='City', lazy='dynamic')
+
+    @staticmethod
+    def insert_cities():
+         if City.query.first() is None:
+             torino = City(name='TORINO')
+             bologna = City(name='BOLOGNA')
+             roma = City(name='ROMA')
+             db.session.add_all([torino, bologna, roma])
+             db.session.commit()
+             db.session.close()

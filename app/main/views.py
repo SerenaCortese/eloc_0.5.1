@@ -5,13 +5,14 @@ from app import db
 from app.main.forms import SearchForm
 from app.myUtils import checkForStudReviews, checkForTutReviews
 from . import main
-from ..models import Degree, Subject, Tutor
+from ..models import Degree, Subject, Tutor, City
 
 
 @main.before_app_first_request
 def populate_db():
     Degree.insert_degrees()
     Subject.insert_subjects()
+    City.insert_cities()
 
 
 
@@ -31,16 +32,30 @@ def search():
 
     #popualte form
     db_subjects = Subject.query.order_by('name').all()
+    db_cities = City.query.order_by('name').all()
     sbj_None = Subject(name='', id=0)
     db_subjects.insert(0, sbj_None)
+    city_None = City(name='', id=0)
+    db_cities.insert(0, city_None)
     form.subject.choices = [(g.id, g.name) for g in db_subjects]
+    form.city.choices = [(g.id, g.name) for g in db_cities]
 
     tutors = Tutor.query.all()#pass it as argument in render_template to show the list of tutors available for that
                               #selection
 
     if form.validate_on_submit():
         subject = Subject.query.filter_by(id=form.subject.data).first()
-        return render_template('search.html', form=form, tutors=subject.tutors)
+        selected_tutors = subject.tutors
+
+        #render only the users for that city
+        if City is not None:
+            city = City.query.filter_by(id=form.city.data)
+            if city is not None:
+                for t in selected_tutors:
+                    if not city.city_id == t.city_id:
+                        selected_tutors.remove(t)
+
+        return render_template('search.html', form=form, tutors=selected_tutors)
 
     return render_template('search.html',form=form, tutors=tutors,
                            unreviewed_stud_lessons = checkForStudReviews(current_user),

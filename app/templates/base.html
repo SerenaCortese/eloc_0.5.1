@@ -11,9 +11,35 @@
           crossorigin="anonymous">
 </head>
 <body>
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{ url_for('main.home') }}">Home</a></li>
-        <li><a href="{{ url_for('main.search') }}">Search</a></li>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand text-success" href="{{ url_for('main.home')}}">Home</a>
+
+      <div>
+          <div class="mr-sm-2">
+              {% if not current_user.is_authenticated %}
+              <div class="btn-group dropleft">
+                  <div class="dropdown">
+                      <button class="btn btn-outline-success dropdown-toggle my-2 my-sm-0"
+                              type="button" id="dropdownMenuButton"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register/Login
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item btn btn-outline-success my-2 my-sm-0 text-success" href="{{ url_for('auth.reg') }}">Register</a>
+                          <a class="dropdown-item btn btn-outline-success my-2 my-sm-0 text-success" href="{{ url_for('auth.login') }}">Login</a>
+                      </div>
+                  </div>
+              </div>
+              {% endif %}
+              {% if current_user.is_authenticated %}
+              <button class="btn btn-outline-success my-2 my-sm-0"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
+              {% endif %}
+          </div>
+      </div>
+    </nav>
+
+       <ul>
+           <a class="nav-link" href="{{ url_for('main.home')}}">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ url_for('main.search') }}">Search <span class="sr-only">(current)</span></a>
         {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('users_bp.profile', username=current_user.username) }}">Profile</a></li>
 

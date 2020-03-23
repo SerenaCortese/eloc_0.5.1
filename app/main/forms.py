@@ -5,6 +5,7 @@ from app.models import Subject
 
 
 class SearchForm(FlaskForm):
+    city = SelectField(coerce=int)
     subject = SelectField(coerce=int)
     submit = SubmitField('Search')
 
