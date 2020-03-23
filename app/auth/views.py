@@ -53,8 +53,8 @@ def stud_reg():
                               about_me=form.about_me.data, name=form.name.data, surname=form.surname.data,
                               birth_date=form.birth_date.data, picture_filename=filename)
 
-        city = City.query.filter_by(id=form.city.data)
-        city.append(new_student)
+        city = City.query.filter_by(id=form.city.data).first()
+        new_student.city_id = city.id
 
         db.session.add(new_student)
         db.session.commit()
@@ -109,8 +109,8 @@ def tutor_reg():
             subject = Subject.query.filter_by(id=s).first()
             subject.tutors.append(new_tutor)
 
-        city = City.query.filter_by(id=form.city.data)
-        city.append(new_tutor)
+        city = City.query.filter_by(id=form.city.data).first()
+        new_tutor.city_id = city.id
 
         db.session.commit()
 

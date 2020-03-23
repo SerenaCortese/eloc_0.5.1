@@ -3,92 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {% block title %}{% endblock %}
-    {% block scripts %}{% endblock %}
+
+    {% block head %} {% endblock %}
+
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand text-success" href="{{ url_for('main.home')}}">Home</a>
-
-      <div>
-          <div class="mr-sm-2">
-              {% if not current_user.is_authenticated %}
-              <div class="btn-group dropleft">
-                  <div class="dropdown">
-                      <button class="btn btn-outline-success dropdown-toggle my-2 my-sm-0"
-                              type="button" id="dropdownMenuButton"
-                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register/Login
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item btn btn-outline-success my-2 my-sm-0 text-success" href="{{ url_for('auth.reg') }}">Register</a>
-                          <a class="dropdown-item btn btn-outline-success my-2 my-sm-0 text-success" href="{{ url_for('auth.login') }}">Login</a>
-                      </div>
-                  </div>
-              </div>
-              {% endif %}
-              {% if current_user.is_authenticated %}
-              <button class="btn btn-outline-success my-2 my-sm-0"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
-              {% endif %}
-          </div>
-      </div>
-    </nav>
-
-       <ul>
-           <a class="nav-link" href="{{ url_for('main.home')}}">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-link" href="{{ url_for('main.search') }}">Search <span class="sr-only">(current)</span></a>
-        {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('users_bp.profile', username=current_user.username) }}">Profile</a></li>
-
-            <li><a href="{{ url_for('users_bp.stud_pend_lessons', username=current_user.username) }}">Pending Lessons(student)</a></li>
-            <li><a href="{{ url_for('users_bp.stud_past_lessons', username=current_user.username) }}">Past Lessons(student)</a></li>
-            <li><a href="{{ url_for('users_bp.done_reviews', username=current_user.username) }}">Reviews(student)</a></li>
-
-            {% if current_user.type == 'tutor' %}
-                <li><a href="{{ url_for('users_bp.tutor_pend_lessons', username=current_user.username) }}">Pending Lessons(tutor)</a></li>
-                <li><a href="{{ url_for('users_bp.tutor_past_lessons', username=current_user.username) }}">Past Lessons(tutor)</a></li>
-                <li><a href="{{ url_for('users_bp.gotten_reviews', username=current_user.username) }}">Reviews(tutor)</a></li>
-            {% endif %}
-
-            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-        {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-            <li><a href="{{ url_for('auth.reg') }}">Register</a></li>
-        {% endif %}
-    </ul>
-
-   {% if current_user.is_authenticated %}
-       <p>notifications</p>
-       {% if unreviewed_stud_lessons %}
-           <p>student</p>
-           {% for l in unreviewed_stud_lessons %}
-               <div>{{ l.subject_name }}</div>
-           {% endfor %}
-       {% endif %}
-       {% if reviewed_lessons and current_user.type == 'tutor' %}
-           <p>tutor</p>
-           {% for l in reviewed_lessons %}
-               <div>{{ l.subject_name }}</div>
-           {% endfor %}
-       {% endif %}
-    {% endif %}
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <div class="container-fluid">
-        {% block page_content %}
-
-        {% endblock  %}
-    </div>
+{% block navbar %} {% endblock %}
+{% block content %} {% endblock %}
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

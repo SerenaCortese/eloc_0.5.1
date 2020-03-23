@@ -36,7 +36,7 @@ class StudRegFrom(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(1,64)])#todo - add regex
     surname = StringField('surname', validators=[DataRequired(), Length(1,64)])#todo - add regex
     birth_date = DateField('birth date')
-    city = SelectField('City', validators=[DataRequired], coerce=int)
+    city = SelectField('City', validators=[DataRequired()], coerce=int)
     password = PasswordField('Password', validators=[DataRequired(),
                                                      EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
