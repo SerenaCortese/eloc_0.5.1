@@ -29,14 +29,42 @@
           </div>
       </fieldset>
     </form>
-    {% if tutors %}
-        {% for t in tutors %}
-            <div>
-            {{ t.username }}
-            {% if current_user.is_authenticated %}
-                <a href="{{ url_for('users_bp.book_lesson', tutor_username=t.username, username=current_user.username) }}">book lesson</a>
-            {% endif %}
-            </div>
-        {% endfor %}
+
+
+<div class="container">
+    {% if not tutors %}
+    <p class="alert-danger">There are no tutors available for your selection</p>
     {% endif %}
+    {% if tutors %}
+    <div class="row">
+        {% for t in tutors %}
+        <div class="col-4">
+            <div class="row">
+                <div class="col">
+                    <img src="/static/photos/{{ t.picture_filename }}" height="100%" width="100%">
+                </div>
+                <div class="col">
+                    <div class="row">
+                        {{t.username}}
+                    </div>
+                    <div class="row">
+                        {{t.about_me}}
+                    </div>
+                     <div class="row">
+                        <a href="{{ url_for('users_bp.gotten_reviews', username=t.username) }}">reviews</a>
+                    </div>
+                    {% if current_user.is_authenticated %}
+                    <div class="row">
+                        <a href="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=t.username) }}">book lesson</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
 {% endblock  %}

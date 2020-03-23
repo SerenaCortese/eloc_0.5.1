@@ -3,7 +3,7 @@
 {% block title %}Register - tutor{% endblock %}
 
 {% block page_content %}
-    <form method="post" action="{{ url_for('auth.tutor_reg') }}">
+    <form method="post" action="{{ url_for('auth.tutor_reg') }}" enctype="multipart/form-data">
       {{ form.hidden_tag() }}
       <fieldset class="form-group">
           <legend></legend>

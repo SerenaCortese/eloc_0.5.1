@@ -7,11 +7,8 @@
 {% endblock head %}
 
 {% block navbar %}
-
-
-<!-- START NAVBAR  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">This Page</a>
+  <a class="navbar-brand text-success" href="#">#</a> <!-- todo - eventually replace with a icon (it hits the current page) -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -19,74 +16,107 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('main.search') }}">Search <span class="sr-only">(current)</span></a>
+        <a class="nav-link text-success" href="{{ url_for('main.home') }}">Home <span class="sr-only">(current)</span></a>
+      </li>
+        <li class="nav-item active">
+        <a class="nav-link text-success" href="{{ url_for('main.search') }}">Search <span class="sr-only">(current)</span></a>
       </li>
         {% if current_user.is_authenticated %}
       <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('users_bp.profile', username=current_user.username) }}">Profile</a>
+        <a class="nav-link text-success" href="{{ url_for('users_bp.profile', username=current_user.username) }}">Profile</a>
       </li>
-        {% endif %}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Lessons
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item text-success" href="{{ url_for('users_bp.stud_pend_lessons', username=current_user.username) }}">Pending</a>
+            <a class="dropdown-item text-success"
+             href="{{ url_for('users_bp.stud_past_lessons', username=current_user.username) }}">Attended</a>
+            {% if current_user.type == 'tutor' %}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item text-success" href="{{ url_for('users_bp.tutor_pend_lessons', username=current_user.username) }}">Pending(tutor)</a>
+            <a class="dropdown-item text-success" href="{{ url_for('users_bp.tutor_past_lessons', username=current_user.username) }}">Tutored(tutor)</a>
+            {% endif %}
         </div>
       </li>
+        {% if current_user.type == 'student' %}
       <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <a class="nav-link text-success" href="{{ url_for('users_bp.done_reviews', username=current_user.username) }}" tabindex="-1" aria-disabled="true">Reviews</a>
       </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </div>
-</nav>
-<!-- END NAVBAR  -->
-
-       <ul>
-           <a class="nav-link" href="{{ url_for('main.home')}}">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-link" href="{{ url_for('main.search') }}">Search <span class="sr-only">(current)</span></a>
-        {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('users_bp.profile', username=current_user.username) }}">Profile</a></li>
-
-            <li><a href="{{ url_for('users_bp.stud_pend_lessons', username=current_user.username) }}">Pending Lessons(student)</a></li>
-            <li><a href="{{ url_for('users_bp.stud_past_lessons', username=current_user.username) }}">Past Lessons(student)</a></li>
-            <li><a href="{{ url_for('users_bp.done_reviews', username=current_user.username) }}">Reviews(student)</a></li>
-
+        {% endif %}
+        {% if current_user.type == 'tutor' %}
+              <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-success" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Reviews
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item text-success" href="{{ url_for('users_bp.done_reviews', username=current_user.username) }}">Done</a>
             {% if current_user.type == 'tutor' %}
-                <li><a href="{{ url_for('users_bp.tutor_pend_lessons', username=current_user.username) }}">Pending Lessons(tutor)</a></li>
-                <li><a href="{{ url_for('users_bp.tutor_past_lessons', username=current_user.username) }}">Past Lessons(tutor)</a></li>
-                <li><a href="{{ url_for('users_bp.gotten_reviews', username=current_user.username) }}">Reviews(tutor)</a></li>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-success" href="{{ url_for('users_bp.gotten_reviews', username=current_user.username) }}">Got(tutor)</a>
             {% endif %}
+        </div>
+      </li>
+        {% endif %}
 
-            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-        {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-            <li><a href="{{ url_for('auth.reg') }}">Register</a></li>
+        <div class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-success my-2 my-sm-0">
+                <a class="btn-outline-success">
+                    notifications
+                </a>
+                {% if current_user.type == 'student' %}
+                    {% if not unreviewed_stud_lessons %}
+                        <span class="badge badge-light">0</span>
+                    {% endif %}
+                    {% if unreviewed_stud_lessons %}
+                        <span class="badge badge-light">{{unreviewed_stud_lessons.count()}}</span>
+                    {% endif %}
+                {% endif %}
+                {% if current_user.type == 'tutor' %}
+                    {% if unreviewed_stud_lessons and  reviewed_lessons%}
+                        <span class="badge badge-light">{{unreviewed_stud_lessons.count() + reviewed_lessons.count()}}</span>
+                    {% endif %}
+                    {% if not unreviewed_stud_lessons and  not reviewed_lessons%}
+                        <span class="badge badge-light text-success">0</span>
+                    {% endif %}
+                    {% if unreviewed_stud_lessons and not reviewed_lessons%}
+                        <span class="badge badge-light">{{unreviewed_stud_lessons.count() }}</span>
+                    {% endif %}
+                    {% if notunreviewed_stud_lessons and  reviewed_lessons%}
+                        <span class="badge badge-light">{{reviewed_lessons.count() }}</span>
+                    {% endif %}
+                {% endif %}
+            </button>
+        </div>
+
+
         {% endif %}
     </ul>
 
-   {% if current_user.is_authenticated %}
-       <p>notifications</p>
-       {% if unreviewed_stud_lessons %}
-           <p>student</p>
-           {% for l in unreviewed_stud_lessons %}
-               <div>{{ l.subject_name }}</div>
-           {% endfor %}
-       {% endif %}
-       {% if reviewed_lessons and current_user.type == 'tutor' %}
-           <p>tutor</p>
-           {% for l in reviewed_lessons %}
-               <div>{{ l.subject_name }}</div>
-           {% endfor %}
-       {% endif %}
-    {% endif %}
+
+    <div class="form-inline my-2 my-lg-0">
+        {% if current_user.is_authenticated %}
+      <button class="btn btn-outline-success my-2 my-sm-0"><a class="btn-outline-success" href="{{ url_for('auth.logout') }}">Logout</a></button>
+        {% endif %}
+        {% if not current_user.is_authenticated %}
+<div class="dropdown">
+  <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Register/Login
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item text-success" href="{{ url_for('auth.reg') }}">Register</a>
+    <a class="dropdown-item text-success" href="{{ url_for('auth.login') }}">Login</a>
+  </div>
+</div>
+        {% endif %}
+    </div>
+  </div>
+</nav>
+{% endblock navbar %}
+
+
+{% block notifications %}
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -96,7 +126,7 @@
         {% endif %}
     {% endwith %}
 
-{% endblock navbar %}
+{% endblock notifications %}
 
 
 {%block content %}

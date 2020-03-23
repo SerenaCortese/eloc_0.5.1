@@ -2,5 +2,29 @@
 {% block title %}gotten review{% endblock %}
 
 {% block page_content %}
-    <p> gotten reviews view</p>
+    <div class="container">
+        {% if not us_reviews %}
+        <p class="alert-danger"> There are no reviews for this User</p>
+        {% endif %}
+        {% if us_reviews %}
+        {% for k,v in us_reviews.items() %}
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    {{v.comment}}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        by {{k}}
+                    </div>
+                    <div class="col">
+                        <!-- todo - eventually replace it with  a bootshtrap progress bar-->
+                        {{v.score}}/10
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
 {% endblock  %}

@@ -52,6 +52,8 @@ class StudRegFrom(FlaskForm):
             raise ValidationError('Username already in use')
 
     def validate_birth_date(self, field):#todo - add further controls
+        if not type(field.data) == date:
+            raise ValidationError('date format wrong')
         if field.data>date.today():
             raise ValidationError('you can not be born in the future')
 

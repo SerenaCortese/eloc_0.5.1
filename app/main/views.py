@@ -49,10 +49,10 @@ def search():
 
         #render only the users for that city
         if City is not None:
-            city = City.query.filter_by(id=form.city.data)
+            city = City.query.filter_by(id=form.city.data).first()
             if city is not None:
                 for t in selected_tutors:
-                    if not city.city_id == t.city_id:
+                    if not city.id == t.city_id:
                         selected_tutors.remove(t)
 
         return render_template('search.html', form=form, tutors=selected_tutors)

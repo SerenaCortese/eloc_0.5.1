@@ -33,6 +33,11 @@ def edit_profile(name): #todo - make other attributes modificable
     form.about_me.data = current_user.about_me
     return render_template('user/profile/edit_profile.html', form=form)
 
+@users_bp.route('/user/<username>/become_tutor', methods=['GET', 'POST'])
+@login_required
+def become_tutor(username):
+    return render_template('become_tutor.html')
+
 
 @users_bp.route('/user/<username>/book_lesson_with/<tutor_username>', methods=['GET', 'POST'])
 @login_required
@@ -143,4 +148,10 @@ def done_reviews(username):
 @users_bp.route('/user/<username>/gotten_reviews', methods=['GET', 'POST'])
 @login_required
 def gotten_reviews(username):
-    return render_template('/user/reviews/gotten_reviews.html')
+    tut_lessons = Tutor.query.filter_by(username=username).first().lessons_tutored
+    myDict = {}
+    for l in tut_lessons:
+        if l.review is not None:
+            myDict[User.query.filter_by(id=l.user_id).first().username] = l.review
+    return render_template('/user/reviews/gotten_reviews.html', us_reviews = myDict)
+
