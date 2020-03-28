@@ -12,15 +12,79 @@
 #datepicker > span:hover{cursor: pointer;}
 
 
+
+
+
+
+
+
+
+    .multipleChosen, .multipleSelect2{
+  width: 300px;
+}
+
+
+
+
+
+
+
+
+
+
+
 </style>
 
 <script type="text/javascript">
+
+
+
+
+
     $(function () {
   $("#datepicker").datepicker({
         autoclose: true,
         todayHighlight: true
   }).datepicker('update', new Date());
 });
+
+
+
+
+
+
+
+
+
+
+
+
+   $(document).ready(function(){
+  //Chosen
+  $(".multipleChosen").chosen({
+      placeholder_text_multiple: "What's your rating" //placeholder
+	});
+  //Select2
+  $(".multipleSelect2").select2({
+		placeholder: "What's your rating" //placeholder
+	});
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 
@@ -180,13 +244,16 @@
 
 
 
-    <div class="row ml-4 mr-2 mb-1">
+    <div class="row ml-4 mr-2 mb-1 ">
         <div class="col-2">
             <div class="row ">
-            {{ form.degrees.label }}:
+            {{ form.degrees.label() }}:
             </div>
             <div class="row ">
-            {{ form.degrees(class="rounded") }}
+
+
+                {{ form.degrees(class="rounded") }}
+
             </div>
         </div>
 
@@ -315,8 +382,16 @@
 
     </div>
 
+
+
+
     </form>
 
 </div>
+
+
+
+
+
 
 {% endblock %}

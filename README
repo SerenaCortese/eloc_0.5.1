@@ -1,0 +1,34 @@
+REQUIREMENTS:
+
+you are required to install all the extesnions, most of the are listed in the file "requirements.txt"
+some are not listed but no worries pycharm will ask you to install them..do that
+
+
+On the top-right side, beside the run button, open the dropdown menu --> edit configurations --> flask server
+-->flask debug ON
+
+
+RUN:
+to run the website --> double click on the file "manage.py"
+
+
+some TIPS:
+
+if you wanna select more than 1 degree,subject,...
+on MAC OS hold CMD and select..on windows i don't know
+
+
+
+
+DB POPULATION:
+
+STUDENTS:
+
+long@gmail - pass:1234
+
+
+TUTORS:
+
+francesco@gmail.com pass:1234
+behy@gmial.com pass:1234
+nandy@gmail.com pass:1234
