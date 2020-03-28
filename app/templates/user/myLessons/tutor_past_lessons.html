@@ -1,34 +1,50 @@
 {% extends "layout.html" %}
-{% block title %}tutor - past lessons{% endblock %}
+{% block title %}PAST LESSONS (tutor){% endblock %}
 
 {% block page_content %}
 
 
+
 {% if not lessons %}
-<p class="alert-danger">There are no attended lessons</p>
-{% endif%}
-{% if  lessons %}
-<div class="container">
-    <div class="row">
-
-        <div class="col">
+<p class="alert-danger"> There are no pending lessons</p>
+{% endif %}
 
 
+{% if lessons %}
+
+<div class="container text-left">
+    <div class="row ">
 
 
+        {% for l in lessons%}
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-header">
+                    Lesson
+                </div>
+                <div class="card-body">
 
+                    <p class="card-text">{{l.date}}</p>
+                    <p class="card-text">{{l.time}}</p>
+                    <p class="card-text text-uppercase">{{l.subject_name}}</p>
+                    <p class="card-text">Student: <a href="/user/{{dict[l.id]}}">{{dict[l.id]}}</a></p>
+
+                </div>
+            </div>
         </div>
+        {% endfor %}
 
 
-        <div class="col">
-
-
-        </div>
 
     </div>
-
 </div>
-{% endif%}
+
+
+
+
+{% endif %}
+
+
 
 
 {% endblock  %}

@@ -1,30 +1,99 @@
 {% extends "layout.html" %}
-{% block title %}gotten review{% endblock %}
+{% block title %}RECEIVED REVIEWS{% endblock %}
 
 {% block page_content %}
-    <div class="container">
-        {% if not us_reviews %}
-        <p class="alert-danger"> There are no reviews for this User</p>
-        {% endif %}
-        {% if us_reviews %}
-        {% for k,v in us_reviews.items() %}
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    {{v.comment}}
+
+
+{% if not dict1 %}
+<p class="alert-danger"> There are no reviews</p>
+{% endif %}
+
+
+
+
+
+{% if dict1 %}
+
+
+<div class="container text-left">
+    <div class="row ">
+
+
+        {% for l in lessons %}
+        {% if dict1[l.id] %}
+        <div class="col col-md-6  mb-3 ">
+            <div class="card">
+                <div class="card-header">
+                    Review
                 </div>
-                <div class="row">
-                    <div class="col">
-                        by {{k}}
-                    </div>
-                    <div class="col">
-                        <!-- todo - eventually replace it with  a bootshtrap progress bar-->
-                        {{v.score}}/10
-                    </div>
+                <div class="card-body">
+
+                    <p class="card-text">{{l.date}}</p>
+                    <p class="card-text">{{l.time}}</p>
+                    <p class="card-text text-uppercase">{{l.subject_name}}</p>
+
                 </div>
+
+                <div class="card-footer">
+
+                    <p class="card-text">Comment:</p>
+                    <p class="card-text">{{dict1[l.id].comment}}</p>
+
+
+
+                    <h4 class="card-text text-right  text-primary ">
+                        {% if dict1[l.id].score == 1 %}
+                        <span style="color:#fc0;">&#9733;</span>
+                        <span style="color:#ccc;">&#9733;&#9733;&#9733;&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 2 %}
+                        <span style="color:#fc0;">&#9733;&#9733;</span>
+                        <span style="color:#ccc;">&#9733;&#9733;&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 3 %}
+                        <span style="color:#fc0;">&#9733;&#9733;&#9733;</span>
+                        <span style="color:#ccc;">&#9733;&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 4 %}
+                        <span style="color:#fc0;">&#9733;&#9733;&#9733;&#9733;</span>
+                        <span style="color:#ccc;">&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 5 %}
+                        <span style="color:#fc0;">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        {% endif %}
+                    </h4>
+
+
+                    <p class="card-text ">Author: <a href="/user/{{dict2[l.id]}}">{{dict2[l.id]}}</a></p>
+
+                </div>
+
+
             </div>
         </div>
-        {% endfor %}
         {% endif %}
+        {% endfor %}
+
+
+
     </div>
+</div>
+
+
+
+
+
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
 {% endblock  %}

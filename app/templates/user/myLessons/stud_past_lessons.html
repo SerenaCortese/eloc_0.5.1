@@ -1,103 +1,49 @@
 {% extends "layout.html" %}
-{% block title %}stud - past lessons{% endblock %}
+{% block title %}PAST LESSONS{% endblock %}
 
 {% block page_content %}
 
 
 {% if not lessons %}
-<p class="alert-danger">There are no attended lessons</p>
-{% endif%}
-{% if  lessons %}
-<div class="container">
-    <div class="row">
-
-        <div class="col">
+<p class="alert-danger"> There are no pending lessons</p>
+{% endif %}
 
 
-            <table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">Tutor</th>
-             </tr>
-    </thead>
-    <tbody>
+{% if lessons %}
 
-    {%for t in tut_usernames %}
-    <tr>
-        <td>
-           <a href="/user/{{t}}">{{t}}</a>
-        </td>
-    </tr>
-    {% endfor %}
+<div class="container text-left">
+    <div class="row ">
 
 
+        {% for l in lessons%}
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-header">
+                    Lesson
+                </div>
+                <div class="card-body">
 
+                    <p class="card-text">{{l.date}}</p>
+                    <p class="card-text">{{l.time}}</p>
+                    <p class="card-text text-uppercase">{{l.subject_name}}</p>
+                    <p class="card-text">Tutor: <a href="/user/{{dict[l.id]}}">{{dict[l.id]}}</a></p>
 
-    </tbody>
-            </table>
+                </div>
 
+                    {% if not l.review%}
+                <div class="card-footer text-center mr-2">
+                        <a class="btn btn-primary" href="/user/{{current_user.username}}/review_lesson/{{l.id}}">Review it</a>
+                </div>
+                    {% endif %}
+
+            </div>
         </div>
-
-        <div class="col">
-
-            <table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Subject</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-
-  {%for l in lessons %}
-
-  <tr>
-
-      <td>
-
-          {{l.date}}
-
-
-      </td>
-
-      <td>
-
-          {{l.subject_name}}
-
-      </td>
-
-
-      <td>
-          {% if not l.review%}
-          <a href="/user/{{current_user.username}}/review_lesson/{{l.id}}">Review it</a>
-          {% endif %}
-      </td>
-
-
-  </tr>
-
-
-
-
-  {% endfor %}
-
-
-
-
-
-</tbody>
-</table>
-
-        </div>
-
+        {% endfor %}
 
 
 
     </div>
-
 </div>
-{% endif%}
-
+{% endif %}
 
 {% endblock  %}

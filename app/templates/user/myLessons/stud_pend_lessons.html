@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}stud - pending lessons{% endblock %}
+{% block title %}PENDING LESSONS{% endblock %}
 
 {% block page_content %}
 
@@ -10,93 +10,38 @@
 
 {% if lessons %}
 
-<div class="container">
-
-    <div class="row">
-
-        <div class="col">
-
-            <table class="table table-hover">
-  <thead>
-    <tr>
-                <th scope="col">Tutor</th>
-
-    </tr>
-  </thead>
-                <tbody>
-                {%for t in tutor_usernames%}
-                <tr>
-                    <td>
-                        <a href="/user/{{t}}">{{t}}</a>
-                    </td>
-                </tr>
+<div class="container text-left">
+    <div class="row ">
 
 
-                {% endfor %}
+        {% for l in lessons%}
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-header">
+                    Lesson
+                </div>
+                <div class="card-body">
 
+                    <p class="card-text">{{l.date}}</p>
+                    <p class="card-text">{{l.time}}</p>
+                    <p class="card-text text-uppercase">{{l.subject_name}}</p>
+                    <p class="card-text">Tutor: <a href="/user/{{dict[l.id]}}">{{dict[l.id]}}</a></p>
 
-                </tbody>
-            </table>
-
-
-
+                </div>
+            </div>
         </div>
-
-
-
-        <div class="col">
-
-
-
-
-                        <table class="table table-hover">
-  <thead>
-    <tr>
-                <th scope="col">Date</th>
-        <th>Subject</th>
-
-    </tr>
-  </thead>
-                <tbody>
-            {%for l in lessons%}
-            <tr>
-                <td>
-                    {{l.date}}
-                </td>
-                <td>
-                    {{l.subject_name}}
-                </td>
-            </tr>
-
-
-
-            {%endfor%}
-
-
-                </tbody>
-            </table>
-
-
-        </div>
-
-
-
-
+        {% endfor %}
 
 
 
     </div>
-
-
-
-
-
 </div>
 
 
 
 
 {% endif %}
+
 
 
 

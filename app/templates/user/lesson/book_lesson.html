@@ -1,16 +1,50 @@
 {% extends "layout.html" %}
-{% block title %}book lesson{% endblock %}
+{% block title %}BOOK LESSON{% endblock %}
+
+{% block scripts  %}
+
+<style>
+
+    label{margin-left: 20px;}
+#datepicker{width:180px; margin: 0 20px 20px 20px;}
+#datepicker > span:hover{cursor: pointer;}
+
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+  $("#datepicker").datepicker({
+        autoclose: true,
+        todayHighlight: true
+  }).datepicker('update', new Date());
+});
+</script>
+
+
+{% endblock %}
+
+
 
 {% block page_content %}
 
-    {% if tutor %}
-{% if not tutor.day_av_slots %}
-<p class="alert-danger">The tutor is not available at any time</p>
-{% endif %}
-        {% if tutor.day_av_slots %}
-<p>The tutor is available</p>
-            {% for a in tutor.day_av_slots %}
-                <p>on {{ a.week_day }} - during these time slots
+
+
+<div class="container text-center">
+    <div class="row ">
+        <div class="col col-md-3  mb-3 text-left">
+            <div class="card">
+                <div class="card-header">Tutor Availability</div>
+            <div class="card-body">
+                {% if not tutor.day_av_slots %}
+                <p class="alert-danger">The tutor is not available at any time</p>
+                {% endif %}
+
+                {% if tutor.day_av_slots %}
+
+                {% for a in tutor.day_av_slots %}
+
+                <p class="card-text">on {{ a.week_day }} - during these time slots
                     {% if a.slot1 %} 7-8 {% endif %} {% if a.label %}8-9 {% endif %}
                     {% if a.slot3 %}9-10 {% endif %} {% if a.slot4 %}10-11 {% endif %}
                     {% if a.slot5 %}11-12 {% endif %} {% if a.slot6 %}12-13 {% endif %}
@@ -18,61 +52,95 @@
                     {% if a.slot10 %}16-17 {% endif %} {% if a.slot11 %}17-18 {% endif %}
                     {% if a.slot12 %}18-19 {% endif %}
                 </p>
-            {% endfor %}
-        {% endif %}
-    {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        </div>
 
-    <form method="post" action="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=tutor_username) }}">
+        {% if tutor.day_av_slots %}
+        <div class="col col-md-3  mb-3 col-md-4">
+            <div class="card text-left">
+
+                <div class="card-body">
+                <form method="post" action="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=tutor_username) }}">
       {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-          <legend></legend>
-          <div class="form-group">
-              <div class="row">
-                  <div class="col">
-                      {{ form.subject.label }}:
+
+                    <div class=" mb-2 ml-4">
+
                       {{ form.subject }}
-                  </div>
-                  {% if form.subject.errors %}
+</div>
+                     {% if form.subject.errors %}
                   {% for err in form.subject.errors %}
                       <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-                  <div class="col">
 
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col">
-                  {{ form.day.label }}:
-                   {{ form.day(class="control-form", placeholder="YYYY-MM-DD") }}
-                  </div>
-                  {% if form.day.errors %}
+<div class="">
+
+
+
+
+    <div id="datepicker" class="input-group date" data-date-format="yyyy-mm-dd">
+    {{ form.day(class="control-form rounded", placeholder="YYYY-MM-DD") }}
+    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+</div>
+
+
+
+
+
+</div>
+
+
+                    {% if form.day.errors %}
                   {% for err in form.day.errors %}
                       <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-              </div>
-              <div class="row">
-                  <div class="col">
-                      {{ form.time.label }} slots:
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col">
-                      {{ form.time }}
-                  </div>
-                   {% if form.time.errors %}
+
+
+                    <div class="mt-2 ml-3">
+                        {{ form.time(class="rounded form-control") }}
+                    </div>
+
+
+
+                    {% if form.time.errors %}
                   {% for err in form.time.errors %}
                       <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-              </div>
-              <div class="row">
-                  <div class="col">
-                  {{ form.submit(class="btn btn-outline-success") }}
-                      </div>
-              </div>
-          </div>
-      </fieldset>
-    </form>
+
+
+                    <div class="ml-4 mt-3 text-center">
+                        {{ form.submit(class="btn  btn-primary") }}
+                    </div>
+
+
+                </form>
+
+
+</div>
+</div>
+
+        </div>
+        {% endif%}
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock  %}

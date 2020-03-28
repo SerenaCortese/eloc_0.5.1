@@ -1,62 +1,108 @@
 {% extends "layout.html" %}
-{% block title %}profile{% endblock %}
+{% block title %}PROFILE{% endblock %}
 
 {% block page_content %}
-{% if user == current_user %}
-    <div class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-success my-2 my-sm-0">
-            <a class="btn-outline-success" href="{{ url_for('users_bp.edit_profile', name=current_user.username) }}">
-                Edit Profile
-            </a>
-        </button>
-    </div>
-{% endif %}
+
+
 
 
 
 {% if user.username %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <img src="/static/photos/{{ user.picture_filename }}" height="60%" width="50%">
+
+<div class="container text-left">
+    <div class="row ">
+
+
+        <div class="col col-md-3  mb-3 ">
+<div class="card">
+    <img src="/static/photos/{{ user.picture_filename }}" class="card-img-top" alt="profile pic"
+       style=" max-height: 150px; width: border-box">
+    <div class="card-body">
+        <p class="card-text">name: {{user.name}}</p>
+        <p class="card-text">surname: {{user.surname}}</p>
+        <p class="card-text">birth date: {{user.birth_date}}</p>
+        <p class="card-text">city: {{city.name}}</p>
+        <p class="card-text">username: {{user.username}}</p>
+
+
+        <p class="card-text">email: {{user.email}}</p>
+    </div>
+</div>
+</div>
+
+
+
+        {% if user.type == 'tutor'%}
+
+                <div class="col col-md-3  mb-3 ">
+                  <div class="row mb-3">
+<div class="card">
+    <div class="card-body">
+         <h4 class="card-title">Subjects:</h4>
+        {% for s in user.subjects%}
+                    <p class="card-text">{{s.name}}</p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+               <div class="row">
+                   <div class="card">
+    <div class="card-body">
+         <h4 class="card-title">Degrees:</h4>
+        {%for d in user.degrees%}
+                    <p class="card-text">{{d.name}}</p>
+        {% endfor %}
+    </div>
+</div>
+               </div>
+
+                </div>
+
+
+        {% endif %}
+
+        {% if current_user.username == user.username%}
+        <div class="col col-md-3 mb-3">
+        <a class="btn btn-primary  " href="{{ url_for('users_bp.edit_profile', name=current_user.username) }}">Edit</a>
+
         </div>
-        <div class="col">
-            <div class="row">
-                username: {{user.username}}
-            </div>
-            <div class="row">
-                name: {{ user.name }}
-            </div>
-            <div class="row">
-                surname: {{ user.surname }}
-            </div>
-            <div class="row">
-                birth date: {{ user.birth_date }}
-            </div>
-            <div class="row">
-                about me: {{ user.about_me }}
+        {% endif%}
+
+</div>
+
+    <div class="row ">
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title">About me:</h4>
+                    <p class="card-text">{{user.about_me}}</p>
+
+
+                </div>
             </div>
         </div>
     </div>
-    {% if user.type == 'tutor' %}
-    <div class="row">
-        {% if user.degrees %}
-        <div class="col">
-            {% for d in user.degrees %}
-                <div class="row">{{ d.name }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% if user.subjects %}
-        <div class="col">
-            {% for d in user.subjects %}
-                <div class="row">{{ d.name }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    {% endif %}
+
+
+
+
 </div>
 {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock page_content %}

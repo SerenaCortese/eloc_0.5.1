@@ -3,40 +3,100 @@ from flask_login import login_required, current_user
 
 from app.main.views import checkForStudReviews, checkForTutReviews
 from . import users_bp
-from .forms import EditProfileForm, BookLessonForm, ReviewForm
+from .forms import EditProfileForm, BookLessonForm, ReviewForm, BecomeTutor
 from ..__init__ import db
 from ..auth.forms import day_slots
-from ..models import User, Subject, Tutor, Lesson, Review, Notification
+from ..models import User, Subject, Tutor, Lesson, Review, Notification, City, Degree, Student
+from app.myUtils import set_AvSlotsLists, setLessonTime
 
 
 @users_bp.route('/user/<username>', methods=['GET', 'POST'])
 def profile(username):
     user = User.query.filter_by(username=str(username)).first()
+    city = City.query.filter_by(id=user.city_id).first()
     if user is None:
         abort(404)
-    return render_template('user/profile/profile.html', user=user,
-                           unreviewed_stud_lessons = checkForStudReviews(current_user),
-                           reviewed_lessons=checkForTutReviews(current_user))
+    return render_template('user/profile/profile.html', user=user, city=city)
 
 @users_bp.route('/user/<name>/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile(name): #todo - make other attributes modificable
     form = EditProfileForm()
     if form.validate_on_submit():
-        #todo - make sure the user is modifying his/her own profile
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
+        #current_user.city_id = form.city.data
         db.session.commit()
         flash('Your profile has been updated.')
         return redirect(url_for('users_bp.profile', username=current_user.username))
+
+    #db_cities = City.query.order_by('name').all()
+    #form.city.choices = [(g.id, g.name) for g in db_cities]
+    city = City.query.filter_by(id=current_user.city_id).first()
     form.username.data = current_user.username
     form.about_me.data = current_user.about_me
-    return render_template('user/profile/edit_profile.html', form=form)
+    return render_template('user/profile/edit_profile.html', form=form, city=city)
 
 @users_bp.route('/user/<username>/become_tutor', methods=['GET', 'POST'])
 @login_required
 def become_tutor(username):
-    return render_template('become_tutor.html')
+
+    form = BecomeTutor()
+
+    db_degrees = Degree.query.order_by('name').all()
+    db_subjects = Subject.query.order_by('name').all()
+    form.degrees.choices = [(g.id, g.name) for g in db_degrees]
+    form.subjects.choices = [(g.id, g.name) for g in db_subjects]
+
+
+    user = User.query.filter_by(username=str(username)).first()
+    if user is None:
+        abort(404)
+
+    if form.validate_on_submit():
+        if user.type == 'tutor':
+            flash('you are already a tutor')
+            return redirect(url_for('main.home'))
+
+        user.type = 'tutor'
+
+
+        new_tutor = Tutor(id=user.id, email=user.email, username=user.username, password=user.password,
+                          about_me=user.about_me, name=user.name, surname=user.surname,
+                          birth_date=user.birth_date, picture_filename=user.picture_filename, pay_rate=user.pay_rate)
+
+        db.session.commit()
+
+
+
+        # populate db.tutor object availability fields
+        set_AvSlotsLists(form.mon_av_hours_slot, new_tutor)
+        set_AvSlotsLists(form.tue_av_hours_slot, new_tutor)
+        set_AvSlotsLists(form.wed_av_hours_slot, new_tutor)
+        set_AvSlotsLists(form.thu_av_hours_slot, new_tutor)
+        set_AvSlotsLists(form.fri_av_hours_slot, new_tutor)
+        set_AvSlotsLists(form.sat_av_hours_slot, new_tutor)
+        set_AvSlotsLists(form.sun_av_hours_slot, new_tutor)
+
+        # populate db.tutor.degrees filed
+        for d in form.degrees.data:
+            degree = Degree.query.filter_by(id=d).first()
+            new_tutor.degrees.append(degree)
+
+        # populate db.tutor.subjects filed
+        for s in form.subjects.data:
+            subject = Subject.query.filter_by(id=s).first()
+            subject.tutors.append(new_tutor)
+
+        db.session.commit()
+
+        flash('You are now registred as a tutor.')
+        return redirect(url_for('main.home'))
+
+
+
+
+    return render_template('/user/profile/become_tutor.html', user=user, form=form)
 
 
 @users_bp.route('/user/<username>/book_lesson_with/<tutor_username>', methods=['GET', 'POST'])
@@ -63,6 +123,8 @@ def book_lesson(username, tutor_username):
 
         subject = Subject.query.filter_by(id=form.subject.data).first()
 
+        print str(form.time.data) + '- type' + str(type(form.time.data))
+
         #form.subject is in tutor.subjects?
         if subject not in tutor.subjects:
             flash('This subject is not available for the selected tutor')
@@ -79,13 +141,14 @@ def book_lesson(username, tutor_username):
                                             tutor_username=tutor_username))
 
             #insert stuff into db
-            new_lesson = Lesson(subject_name=subject.name, date=form.day.data)
+            new_lesson = Lesson(subject_name=subject.name, date=form.day.data, time=setLessonTime(str(form.time.data)))
+
             current_user.lessons_attended.append(new_lesson)
             tutor.lessons_tutored.append(new_lesson)
             db.session.commit()
 
 
-            flash('You booked the lesson mate!')
+            flash('You booked the lesson!')
             return redirect(url_for('users_bp.lesson_payment', username=current_user.username))
 
     return render_template('user/lesson/book_lesson.html',tutor_username=tutor_username, form=form, tutor=tutor)
@@ -93,7 +156,12 @@ def book_lesson(username, tutor_username):
 @users_bp.route('/user/<username>/pay_lesson', methods=['GET', 'POST'])
 @login_required
 def lesson_payment(username):
-    return render_template('/user/lesson/lesson_payment.html', username=username, day_slots=day_slots)
+    us_id = User.query.filter_by(username=username).first().id
+    lesson = Lesson.query.filter_by(user_id=us_id).first()
+    tut_username = Tutor.query.filter_by(id=lesson.tutor_id).first().username
+    price = Tutor.query.filter_by(id=lesson.tutor_id).first().pay_rate
+
+    return render_template('/user/lesson/lesson_payment.html', username=username, lesson=lesson, tut_username=tut_username, price=price)
 
 
 
@@ -102,39 +170,48 @@ def lesson_payment(username):
 def stud_pend_lessons(username):
     lessons = User.query.filter_by(username=username).first().get_stud_pend_lessons_attended()
 
-    tutor_usernames =[]
+    dict ={}
     for l in lessons:
-        tutor_usernames.append(Tutor.query.filter_by(id=l.tutor_id).first().username)
+        dict[l.id] =Tutor.query.filter_by(id=l.tutor_id).first().username
 
-    return render_template('/user/myLessons/stud_pend_lessons.html', lessons=lessons, tutor_usernames=tutor_usernames)
+
+    return render_template('/user/myLessons/stud_pend_lessons.html', lessons=lessons, dict=dict)
 
 @users_bp.route('/user/<username>/stud_past_lessons', methods=['GET', 'POST'])
 @login_required
 def stud_past_lessons(username):
     lessons = User.query.filter_by(username=username).first().get_stud_past_lessons_attended()
-    #User.query.filter_by(username=username).first().dontRemindMe()
-    tut_usernames = []
+
     dict = {}
     for l in lessons:
-        tut_usernames.append(Tutor.query.filter_by(id=l.tutor_id).first().username)
+        dict[l.id] = Tutor.query.filter_by(id=l.tutor_id).first().username
 
-    return render_template('/user/myLessons/stud_past_lessons.html', lessons=lessons, tut_usernames= tut_usernames)
+
+    return render_template('/user/myLessons/stud_past_lessons.html', lessons=lessons, dict= dict)
 
 @users_bp.route('/user/<username>/tutor_pend_lessons', methods=['GET', 'POST'])
 @login_required
 def tutor_pend_lessons(username):
     lessons=[]
+    dict = {}
     if Tutor.query.filter_by(username=username).first() is not None:
         lessons = Tutor.query.filter_by(username=username).first().get_tutor_pend_lessons()
-    return render_template('/user/myLessons/tutor_pend_lessons.html', lessons=lessons)
+        for l in lessons:
+            dict[l.id] = User.query.filter_by(id=l.user_id).first().username
+    return render_template('/user/myLessons/tutor_pend_lessons.html', lessons=lessons, dict=dict)
 
 @users_bp.route('/user/<username>/tutor_past_lessons', methods=['GET', 'POST'])
 @login_required
 def tutor_past_lessons(username):
+
     lessons =[]
+    dict = {}
+
     if Tutor.query.filter_by(username=username).first() is not None:
         lessons = Tutor.query.filter_by(username=username).first().get_tutor_past_lessons()
-    return render_template('/user/myLessons/tutor_past_lessons.html', lessons=lessons)
+        for l in lessons:
+            dict[l.id] = User.query.filter_by(id=l.user_id).first().username
+    return render_template('/user/myLessons/tutor_past_lessons.html', lessons=lessons, dict=dict)
 
 @users_bp.route('/user/<username>/review_lesson/<lesson_id>', methods=['GET', 'POST'])
 @login_required
@@ -142,7 +219,21 @@ def review_lesson(username, lesson_id):
     form = ReviewForm()
     if form.validate_on_submit():
         #todo - implement controls
-        new_review = Review(comment=form.comment.data, score=form.score.data, lesson_id=lesson_id)
+
+        score = 0
+        if str(form.star.data) == '1-star':
+            score = 1
+        if str(form.star.data) == '2-stars':
+            score = 2
+        if str(form.star.data) == '3-stars':
+            score = 3
+        if str(form.star.data) == '4-stars':
+            score = 4
+        if str(form.star.data) == '5-stars':
+            score = 5
+
+
+        new_review = Review(comment=form.comment.data, score=score, lesson_id=lesson_id)
         db.session.add(new_review)
         new_notification = Notification(lesson_id=lesson_id)
         db.session.add(new_notification)
@@ -157,22 +248,30 @@ def review_lesson(username, lesson_id):
 def done_reviews(username):
 
     attended_lessons = User.query.filter_by(username=username).first().get_stud_past_lessons_attended()
-    tutors = []
-    reviews = []
+    dict1 ={}
+    dict2 = {}
     for l in attended_lessons:
-        reviews.append(l.review)
-        tutors.append(Tutor.query.filter_by(id=l.tutor_id).first())
+        if l.review:
+            dict1[l.id] = l.review
+            dict2[l.id] = Tutor.query.filter_by(id=l.tutor_id).first().username
 
 
-    return render_template('/user/reviews/done_reviews.html', lessons=attended_lessons, reviews=reviews, tutors=tutors)
+    return render_template('/user/reviews/done_reviews.html', lessons=attended_lessons, dict1=dict1, dict2=dict2)
 
 @users_bp.route('/user/<username>/gotten_reviews', methods=['GET', 'POST'])
 @login_required
 def gotten_reviews(username):
-    tut_lessons = Tutor.query.filter_by(username=username).first().lessons_tutored
-    myDict = {}
+    tut = Tutor.query.filter_by(username=username).first()
+    print str(tut)
+    tut_lessons = tut.get_tutor_past_lessons()
+    dict1 = {}
+    dict2 = {}
+    print str(tut_lessons)
     for l in tut_lessons:
-        if l.review is not None:
-            myDict[User.query.filter_by(id=l.user_id).first().username] = l.review
-    return render_template('/user/reviews/gotten_reviews.html', us_reviews = myDict)
+        print str(l.review)
+        if l.review:
+            dict1[l.id] = l.review
+            dict2[l.id] = User.query.filter_by(id=l.user_id).first().username
+
+    return render_template('/user/reviews/gotten_reviews.html', dict1 = dict1, dict2=dict2, lessons=tut_lessons)
 

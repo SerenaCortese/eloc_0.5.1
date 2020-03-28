@@ -88,7 +88,7 @@ def tutor_reg():
 
         new_tutor = Tutor(email=form.email.data, username=form.username.data,password=form.password.data,
                               about_me=form.about_me.data, name=form.name.data, surname=form.surname.data,
-                              birth_date=form.birth_date.data, picture_filename=filename)
+                              birth_date=form.birth_date.data, picture_filename=filename ,pay_rate=form.pay_rate.data)
 
         #populate db.tutor object availability fields
         set_AvSlotsLists(form.mon_av_hours_slot, new_tutor)

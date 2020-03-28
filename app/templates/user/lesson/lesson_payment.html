@@ -1,6 +1,132 @@
 {% extends "layout.html" %}
-{% block title %}lesson payment view{% endblock %}
+{% block title %}PAY LESSON {% endblock %}
+
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
 
 {% block page_content %}
-    <p>this is the lesson payment view</p>
+
+
+
+    <div class="container">
+
+
+  <div class="row">
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your cart</span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item  justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">LESSON</h6>
+          </div>
+
+        </li>
+        <li class="list-group-item  justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0 text-left">Subject</h6>
+            <small class="text-muted text-right">{{lesson.subject_name}} </small>
+          </div>
+
+        </li>
+        <li class="list-group-item  justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0 text-left">Date</h6>
+            <small class="text-muted text-right"> {{lesson.date}}</small>
+          </div>
+        </li>
+        <li class="list-group-item  justify-content-between ">
+
+        <div>
+            <h6 class="my-0 text-left">Tutor</h6>
+            <small class="text-muted text-right"> {{tut_username}}</small>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Total (EUR)</span>
+          <strong>€{{price}}</strong>
+        </li>
+      </ul>
+
+
+    </div>
+    <div class="col-md-8 order-md-1">
+      <form class="needs-validation" novalidate>
+
+        <h4 class="mb-3">Payment</h4>
+
+        <div class="d-block my-3">
+          <div class="custom-control custom-radio">
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+            <label class="custom-control-label" for="credit">Credit card</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="debit">Debit card</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="paypal">PayPal</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-name">Name on card</label>
+            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+            <small class="text-muted">Full name as displayed on card</small>
+            <div class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-number">Credit card number</label>
+            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+            <div class="invalid-feedback">
+              Credit card number is required
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="cc-expiration">Expiration</label>
+            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+            <div class="invalid-feedback">
+              Expiration date required
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="cc-cvv">CVV</label>
+            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+            <div class="invalid-feedback">
+              Security code required
+            </div>
+          </div>
+        </div>
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+      </form>
+    </div>
+  </div>
+
+
+
 {% endblock  %}

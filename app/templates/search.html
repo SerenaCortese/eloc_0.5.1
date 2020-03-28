@@ -1,70 +1,122 @@
 {% extends "layout.html" %}
 {% block title %}search{% endblock %}
 
+
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+<link href="{{ url_for('static/css', filename='signin.css') }}" rel="stylesheet">
+
+
+
+
 {% block page_content %}
-    <form class="form-inline" method="post" action="{{ url_for('main.search') }}">
-      {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-          <legend></legend>
-          <div class="form-group mb-2">
-              {{ form.city.label }}:
-              {{ form.city }}
-              {% if form.city.errors %}
-                  {% for err in form.city.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <div class="form-group mx-sm-3 mb-2">
-              {{ form.subject.label }}:
-              {{ form.subject }}
-              {% if form.subject.errors %}
-                  {% for err in form.subject.errors %}
-                      <span>{{ err }}</span>
-                  {% endfor %}
-              {% endif %}
-          </div>
-          <div class="form-group mb-2">
-              {{ form.submit(class="btn btn-outline-success") }}
-          </div>
-      </fieldset>
-    </form>
 
+<!-- search form -->
 
-<div class="container">
-    {% if not tutors %}
-    <p class="alert-danger">There are no tutors available for your selection</p>
-    {% endif %}
-    {% if tutors %}
-    <div class="row">
-        {% for t in tutors %}
-        <div class="col-4">
-            <div class="row">
-                <div class="col">
-                    <img src="/static/photos/{{ t.picture_filename }}" height="100%" width="100%">
-                </div>
-                <div class="col">
-                    <div class="row">
-                        {{t.username}}
-                    </div>
-                    <div class="row">
-                        {{t.about_me}}
-                    </div>
-                     <div class="row">
-                        <a href="{{ url_for('users_bp.gotten_reviews', username=t.username) }}">reviews</a>
-                    </div>
-                    {% if current_user.is_authenticated %}
-                    <div class="row">
-                        <a href="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=t.username) }}">book lesson</a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+<div class="container mb-4">
+    <form class="form justify-content-center" method="post" action="{{ url_for('main.search') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-inline my-2 my-lg-0 mr-5">
+
+            {{ form.city(class="mr-3") }}
+
+            {{ form.subject(class="mr-3") }}
+
+            {{ form.submit(class="btn btn-primary ") }}
+
         </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+        <div class="form-inline my-2 my-lg-0 mr-5">
+
+            {% if form.city.errors %}
+                  {% for err in form.city.errors %}
+                      <div class="alert-danger" >{{ err }}</div>
+                  {% endfor %}
+              {% endif %}
+
+        </div>
+        <div class="form-inline my-2 my-lg-0 mr-5">
+
+                    {% if form.subject.errors %}
+                  {% for err in form.subject.errors %}
+                      <div class="alert-danger">{{ err }}</div>
+                  {% endfor %}
+            {% endif %}
+
+
+        </div>
+    </form>
 </div>
 
+<!-- end search form -->
+
+
+
+<!-- tutors list -->
+
+{% if not tutors %}
+<p class="alert-danger">There are no tutors available for your selection</p>
+{% endif %}
+{% if tutors %}
+
+<div class="container text-left">
+    <div class="row ">
+
+        {% for t in tutors %}
+
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-header text-center">
+        <a class=" text-uppercase" href="/user/{{t.username}}">{{t.username}}</a>
+      </div>
+
+  <img src="/static/photos/{{ t.picture_filename }}" class="card-img-top" alt="profile pic"
+       style=" max-height: 150px; width: border-box">
+
+  <div class="card-body">
+      <a href="{{ url_for('users_bp.gotten_reviews', username=t.username) }}">reviews</a>
+    <h5 class="card-title mt-2">About:</h5>
+    <p class="card-text">{{t.about_me}}</p>
+
+      <p class="card-text text-right">€{{t.pay_rate}}</p>
+
+      {% if current_user.is_authenticated %}
+    <a href="{{ url_for('users_bp.book_lesson', username=current_user.username, tutor_username=t.username) }}" class="btn btn-primary ml-5 mr-5">book lesson</a>
+      {% endif %}
+  </div>
+</div>
+        </div>
+
+
+        {% endfor %}
+
+
+
+
+
+
+
+    </div>
+</div>
+{% endif %}
+
+<!-- end tutors list -->
 
 {% endblock  %}

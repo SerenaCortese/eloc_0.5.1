@@ -1,13 +1,49 @@
 {% extends "layout.html" %}
-{% block title %}tutor - pending lessons{% endblock %}
+{% block title %}PENDING LESSONS (tutor){% endblock %}
 
 {% block page_content %}
-    <p>tutor - pending lessons view</p>
 
-    {% if lessons %}
-        {% for l in lessons %}
-            <p>{{ l.subject_name }} - {{ l.date }}</p>
+
+
+{% if not lessons %}
+<p class="alert-danger"> There are no pending lessons</p>
+{% endif %}
+
+
+{% if lessons %}
+
+<div class="container text-left">
+    <div class="row ">
+
+
+        {% for l in lessons%}
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-header">
+                    Lesson
+                </div>
+                <div class="card-body">
+
+                    <p class="card-text">{{l.date}}</p>
+                    <p class="card-text">{{l.time}}</p>
+                    <p class="card-text text-uppercase">{{l.subject_name}}</p>
+                    <p class="card-text">Student: <a href="/user/{{dict[l.id]}}">{{dict[l.id]}}</a></p>
+
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    {% endif %}
+
+
+
+    </div>
+</div>
+
+
+
+
+{% endif %}
+
+
 
 {% endblock  %}

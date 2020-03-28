@@ -1,26 +1,104 @@
 {% extends "layout.html" %}
 
-{% block title %}Edit profile{% endblock %}
+{% block title %}EDIT PROFILE{% endblock %}
 
 {% block page_content %}
 
-    <form method="post" action="{{ url_for('users_bp.edit_profile', name=current_user.username) }}">
-      {{ form.hidden_tag() }}
-        <div class="row">
-            <div class="col">
-          <div class="row">
-              {{ form.username.label }}:
-              {{ form.username(class="form-control") }}
-          </div>
-          <div class="row">
-              {{ form.about_me.label }}
-              {{ form.about_me(class="form-control") }}
-          </div>
-          <div class="row">
-              {{ form.submit(class="btn btn-outline-success")}}
-          </div>
+
+<form class="container text-left" method="post" action="{{ url_for('users_bp.edit_profile', name=current_user.username) }}">
+    {{ form.hidden_tag() }}
+
+
+
+        <div class="row ">
+
+
+        <div class="col col-md-3  mb-3 ">
+<div class="card">
+    <img src="/static/photos/{{ current_user.picture_filename }}" class="card-img-top" alt="profile pic"
+       style=" max-height: 150px; width: border-box">
+    <div class="card-body">
+        <p class="card-text">name: {{current_user.name}}</p>
+        <p class="card-text">surname: {{current_user.surname}}</p>
+        <p class="card-text">birth date: {{current_user.birth_date}}</p>
+        <p class="card-text">city: {{city.name}}</p>
+        {{ form.username(class="form-control mb-1") }}
+
+
+        <p class="card-text">email: {{current_user.email}}</p>
+
+    </div>
+</div>
+</div>
+
+
+
+        {% if current_user.type == 'tutor'%}
+
+                <div class="col col-md-3  mb-3 ">
+                  <div class="row mb-3">
+<div class="card">
+    <div class="card-body">
+         <h4 class="card-title">Subjects:</h4>
+        {% for s in current_user.subjects%}
+                    <p class="card-text">{{s.name}}</p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+               <div class="row">
+                   <div class="card">
+    <div class="card-body">
+         <h4 class="card-title">Degrees:</h4>
+        {%for d in current_user.degrees%}
+                    <p class="card-text">{{d.name}}</p>
+        {% endfor %}
+    </div>
+</div>
+               </div>
+
+                </div>
+
+
+        {% endif %}
+ <div class="col col-md-3 mb-3">
+
+     {{ form.submit(class="btn btn-primary")}}
+        </div>
+
+</div>
+
+    <div class="row ">
+        <div class="col col-md-3  mb-3 ">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title">About me:</h4>
+                    {{ form.about_me(class="form-control") }}
+
+
                 </div>
             </div>
-    </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+</form>
+
+
+
+
+
+
+
 
 {% endblock %}

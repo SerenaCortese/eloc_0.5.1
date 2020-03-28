@@ -1,35 +1,147 @@
 {% extends "layout.html" %}
-{% block title %}review lesson{% endblock %}
+{% block title %}REVIEW LESSON{% endblock %}
+
+
+{% block scripts %}
+
+
+<style>
+
+/* component */
+
+.star-rating {
+
+  display:flex;
+  flex-direction: row-reverse;
+  font-size:1.5em;
+  justify-content:space-around;
+  padding:0 .2em;
+  text-align:center;
+  width:5em;
+}
+
+.star-rating input {
+  display:none;
+}
+
+.star-rating label {
+  color:#ccc;
+  cursor:pointer;
+}
+
+.star-rating :checked ~ label {
+  color:#f90;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color:#fc0;
+}
+
+
+
+
+
+
+
+
+</style>
+
+
+
+
+
+
+
+{% endblock scripts %}
+
+
+
 
 {% block page_content %}
-    <form method="post" action="/user/{{current_user.username}}/review_lesson/{{lesson_id}}">
-        {{ form.hidden_tag() }}
-          <legend></legend>
-        <div class="row">
-          <div class="col">
-              {{ form.comment.label }}:
-              {{ form.comment(class="form-control") }}
-              {% if form.comment.errors %}
+
+
+
+
+            <form class="rating container text-left mt-5" method="post" action="/user/{{current_user.username}}/review_lesson/{{lesson_id}}">
+                <legend >Review</legend>
+                {{ form.hidden_tag() }}
+
+
+                <div class="row ">
+                    <div class="col">
+                {{ form.comment(class="form-control mb-3", placeholder="comment") }}
+                {% if form.comment.errors %}
                   {% for err in form.comment.errors %}
                       <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
-              {% endif %}
-          </div>
-            <div class="col">
-              {{ form.score.label }}:
-              {{ form.score(class="form-control", placeholder="A number within 1 and 10") }}
-              {% if form.score.errors %}
-                  {% for err in form.score.errors %}
-                      <div class="col alert-danger">{{ err }}</div>
-                  {% endfor %}
-              {% endif %}
-          </div>
-            </div>
-        <div class="row">
-                    <div class="col">
-            {{ form.submit(class="btn btn-outline-success") }}
-        </div>
-        </div>
-    </form>
+                {% endif %}
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+                <div class="star-rating">
+
+{% for subfield in form.star %}
+
+        {{ subfield() }}
+        {{subfield.label(class="star")}}
+
+{% endfor %}
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="row mt-2">
+                    <div class="col col-md-3">
+                {{ form.submit(class="btn  btn-primary ") }}
+                    </div>
+                </div>
+
+
+
+            </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock  %}

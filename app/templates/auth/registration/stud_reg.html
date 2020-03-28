@@ -1,43 +1,72 @@
 {% extends "layout.html" %}
 
-{% block title %}Register - student{% endblock %}
+{% block title %}STUDENT REGISTRATION{% endblock %}
+
+
+{% block scripts  %}
+
+<style>
+
+    label{margin-left: 20px;}
+#datepicker{width:180px; margin: 0 20px 20px 20px;}
+#datepicker > span:hover{cursor: pointer;}
+
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+  $("#datepicker").datepicker({
+        autoclose: true,
+        todayHighlight: true
+  }).datepicker('update', new Date());
+});
+</script>
+
+
+{% endblock %}
+
+
 
 {% block page_content %}
 
 
-<div class="container">
-    <div class="row">
+<div class="container mt-1 mb-1">
+    <div class="row justify-content-center">
 
-        <div class="col-2">
-    <div class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-success my-2 my-sm-0">
-            <a class="btn-outline-success" href="{{ url_for('auth.stud_reg') }}">
+
+    <div class="form-inline my-2 my-lg-0 mr-5">
+
+            <a class="btn btn-lg btn-primary btn-block" href="{{ url_for('auth.stud_reg') }}">
                 Student
             </a>
-        </button>
+
     </div>
-        </div>
-        <div class="col">
-  <div class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-success my-2 my-sm-0">
-            <a class="btn-outline-success" href="{{ url_for('auth.tutor_reg') }}">
+
+<div class="form-inline my-2 my-lg-0 ">
+
+            <a class="btn btn-lg btn-primary btn-block" href="{{ url_for('auth.tutor_reg') }}">
                 Tutor
             </a>
-        </button>
-    </div>
-        </div>
 
-        </div>
 </div>
 
 
+         </div>
 
 
-<form method="post" action="{{ url_for('auth.stud_reg') }}" enctype="multipart/form-data">
+
+
+
+
+
+    <form method="post" action="{{ url_for('auth.stud_reg') }}" enctype="multipart/form-data"
+          class="mt-5 border border-primary rounded">
     {{ form.hidden_tag() }}
-    <div class="row">
+
+    <div class="row ml-5 mb-3 mt-3 justify-content-center">
         <div class="col">
-        {{ form.profile_picture(class="form-control-file", id="exampleFormControlFile1") }}
+        {{ form.profile_picture }}
         </div>
     </div>
     {% if form.profile_picture.errors %}
@@ -45,7 +74,7 @@
                       <div class="col alert-danger">{{ err }}</div>
                   {% endfor %}
               {% endif %}
-  <div class="row">
+  <div class="row ml-2 mr-2 mb-1">
     <div class="col">
       {{ form.name(class="form-control", placeholder="name") }}
     </div>
@@ -53,7 +82,7 @@
       {{ form.surname(class="form-control", placeholder="surname") }}
     </div>
   </div>
-    <div class="row">
+    <div class="row ml-2 mr-2 mb-1 ">
          {% if form.name.errors %}
                   {% for err in form.name.errors %}
                       <div class="col alert-danger">{{ err }}</div>
@@ -65,15 +94,31 @@
                   {% endfor %}
               {% endif %}
     </div>
-    <div class="row">
-          <div class="col">
-              {{ form.birth_date(class="form-control",placeholder="YYYY-MM-DD")}}
-          </div>
-          <div class="col">
+
+
+
+    <div class="row ml-4 mr-2 mt-2 align-left">
+
+        Birth Date:
+
+           <div id="datepicker" class="input-group date" data-date-format="yyyy-mm-dd">
+    {{ form.birth_date(class="form-control")}}
+    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+</div>
+
+
+        <div class="col col-md-7">
               {{ form.city }}
-          </div>
+        </div>
       </div>
-    <div class="row">
+
+
+
+
+
+
+
+    <div class="row ml-2 mr-2 mb-1">
          {% if form.birth_date.errors %}
                   {% for err in form.birth_date.errors %}
                       <div class="col alert-danger">{{ err }}</div>
@@ -86,7 +131,7 @@
               {% endif %}
     </div>
 
-       <div class="row">
+       <div class="row ml-2 mr-2 mb-1">
           <div class="col">
               {{ form.email(class="form-control",placeholder="email")}}
           </div>
@@ -94,7 +139,7 @@
               {{ form.username(class="form-control",placeholder="username")}}
           </div>
       </div>
-    <div class="row">
+    <div class="row ml-2 mr-2 mb-1">
 
         {% if form.email.errors %}
                   {% for err in form.email.errors %}
@@ -110,7 +155,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="row ml-2 mr-2 mb-1">
           <div class="col">
               {{ form.password(class="form-control",placeholder="password")}}
           </div>
@@ -118,7 +163,7 @@
               {{ form.password2(class="form-control",placeholder="confirm password")}}
           </div>
       </div>
-    <div class="row">
+    <div class="row ml-2 mr-2 mb-1">
     {% if form.password.errors %}
                   {% for err in form.password.errors %}
                       <div class="col alert-danger">{{ err }}</div>
@@ -137,12 +182,12 @@
 
 
 
-    <div class="row">
+    <div class="row ml-2 mr-2 mb-1">
         <div class="col">
             {{ form.about_me(placeholder="about me", class="form-control") }}
         </div>
     </div>
-    <div class="row">
+    <div class="row ml-2 mr-2 mb-1">
         {% if form.about_me.errors %}
                   {% for err in form.about_me.errors %}
                       <div class="col alert-danger">{{ err }}</div>
@@ -150,10 +195,19 @@
               {% endif %}
 
     </div>
-    <div class="row">
-        {{form.submit(class="btn btn-outline-success")}}
+    <div class="row ml-2 mr-2 mb-2 justify-content-center">
+
+        {{form.submit(class="btn btn-primary")}}
+
     </div>
 </form>
+
+
+
+
+
+
+
 
 
 

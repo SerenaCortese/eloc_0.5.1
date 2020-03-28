@@ -20,6 +20,8 @@ day_slots = [('1', '07:00 - 08:00'),
              ('12','18:00 - 19:00')]
 
 
+
+
 def set_AvSlotsLists(formDaySlots, new_tutor):
     if formDaySlots.data:
         new_AvSlotsList = AvSlotsList(week_day=str(formDaySlots.label.text))
@@ -50,6 +52,34 @@ def set_AvSlotsLists(formDaySlots, new_tutor):
                 new_AvSlotsList.slot12 = True
         if new_tutor is not None:
             new_tutor.day_av_slots.append(new_AvSlotsList)
+
+
+def setLessonTime(formTimeData):
+    if formTimeData == '1':
+        return '07:00 - 08:00'
+    if formTimeData == '2':
+        return '08:00 - 09:00'
+    if formTimeData == '3':
+        return '09:00 - 10:00'
+    if formTimeData == '4':
+        return '10:00 - 11:00'
+    if formTimeData == '5':
+        return '11:00 - 12:00'
+    if formTimeData == '6':
+        return '12:00 - 13:00'
+    if formTimeData == '7':
+        return '13:00 - 14:00'
+    if formTimeData == '8':
+        return '14:00 - 15:00'
+    if formTimeData == '9':
+        return '15:00 - 16:00'
+    if formTimeData == '10':
+        return '16:00 - 17:00'
+    if formTimeData == '11':
+        return '17:00 - 18:00'
+    if formTimeData == '12':
+        return '18:00 - 19:00'
+
 
 ############################
 

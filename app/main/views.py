@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, send_from_directory
 from flask_login import current_user
 
 from app import db
@@ -7,6 +7,7 @@ from app.myUtils import checkForStudReviews, checkForTutReviews
 from . import main
 from ..models import Degree, Subject, Tutor, City, User, Lesson
 from datetime import date
+import os
 
 
 @main.before_app_first_request
@@ -16,11 +17,28 @@ def populate_db():
     City.insert_cities()
 
 
+@main.route('/favicon.ico')
+def favicon():
+    path = os.path.dirname(os.path.dirname(__file__))
+    join_path = os.path.join(path, 'static', 'icon')
+
+    return send_from_directory(join_path, 'favicon.ico')
+
+@main.route('/logo1.jpg')
+def logo():
+    path = os.path.dirname(os.path.dirname(__file__))
+    join_path = os.path.join(path, 'static', 'logo')
+
+    return send_from_directory(join_path,
+                               'logo1.jpg')
+
 
 @main.route('/home', methods=['GET', 'POST'])
 @main.route('/', methods=['GET', 'POST'])
 def home(): #todo - moidfy the func scope
     tutors = Tutor.query.all()
+
+
 
 
     return render_template('index.html', tutors=tutors,
@@ -35,9 +53,9 @@ def search():
     #popualte form
     db_subjects = Subject.query.order_by('name').all()
     db_cities = City.query.order_by('name').all()
-    sbj_None = Subject(name='', id=0)
+    sbj_None = Subject(name='Subject', id=0)
     db_subjects.insert(0, sbj_None)
-    city_None = City(name='', id=0)
+    city_None = City(name='City', id=0)
     db_cities.insert(0, city_None)
     form.subject.choices = [(g.id, g.name) for g in db_subjects]
     form.city.choices = [(g.id, g.name) for g in db_cities]

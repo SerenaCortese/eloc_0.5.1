@@ -6,6 +6,25 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from . import login_manager
 
+
+'''
+relationships:
+user --> student === 1 to many (it is the only way to get the inheritance in the db model as well)
+user --> tutor === same story
+user --> city === 1 to 1 
+user --> lessons attended === 1 to many
+tutor --> degree === many to many
+tutor --> subject === many to many
+tutor --> lessons tutored === 1 to many 
+tutor --> AvSlotsList === 1 to many (i know there only 7 days in a week..)
+lesson --> review === 1 to 1 
+
+The static methods insert subjects, degrees and cities create some population for the db
+
+'''
+
+
+
 #todo - if other fileds are added to these table
 #todo - they must be promote to db.Model fore ease of handling
 #many to many relationship junction_tables
@@ -17,6 +36,16 @@ tutor_degree = db.Table('tutor_degree',
                         db.Column('tutor_id', db.Integer, db.ForeignKey('tutors.id')),
                         db.Column('degree_id', db.Integer, db.ForeignKey('degrees.id')))
 
+
+'''
+User is the parent, Tutor and Student are the children.
+Student has exactly the same attributes and methods of User, so it is not really necessary, just a concept.
+There are few methods, 2 og them help to distinguish between attended and pending lessons.
+Some others help handling the password.
+The user_loader is a dacorator and it works with Flask-Login extension, it makes available an istance of the user
+to call anywhere in the code as current_user
+The dont_remind_me deals with the notifications (they don't work)..i just left it there..do not care.
+'''
 class User(UserMixin, db.Model):
     #todo - eventually add other attributes
     __tablename__ = 'users'
@@ -80,6 +109,10 @@ class User(UserMixin, db.Model):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+
+''''
+Nothing interesting to say about student 
+'''
 class Student(User):
     __tablename__ = 'students'
 
@@ -90,12 +123,20 @@ class Student(User):
     }
 
 
+'''
+It gots few more attributes of students, all of them are just the declaration of the relationship.
+day_av_slots attribute and the method related are courious way of handling the time in slots.
+The  other methods return the past lessons tutored and the pending lessons to be tutored.
+'''
 class Tutor(User):
     __tablename__ = 'tutors'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
+
     degrees = db.relationship("Degree",secondary=tutor_degree)
     subjects = db.relationship('Subject', secondary=tutor_subject)
+
+    pay_rate= db.Column(db.Float, nullable=False)
 
     lessons_tutored = db.relationship('Lesson', backref='Tutor', lazy='dynamic')
 
@@ -224,6 +265,9 @@ class Lesson(db.Model):
 
     date = db.Column(db.Date)
 
+    time = db.Column(db.String(40))
+
+
     dont_remind_me = db.Column(db.Boolean)#set to true if the user does not want to keep seeing
                                           #the notification of the pending review
 
@@ -232,7 +276,11 @@ class Lesson(db.Model):
     notification = db.relationship('Notification', backref='Lesson', uselist=False)
     #used to tell the tutor he/she got a review
 
-
+'''each istance of this class represents the time slots that a tutor setted as available 
+so between 0 and 7 instances of this class per tutor.
+Each istance ahas 12 boolean attributes representing 12 time slots (1 hoour each) from 7a.m. to 7 p.m. 
+The methods help handling format conversions
+'''
 class AvSlotsList(db.Model):
     __tablename__='av_day_slots'
     week_day = db.Column(db.String(30))
@@ -278,6 +326,10 @@ class AvSlotsList(db.Model):
         #print str(dict)
         return dict
 
+'''
+It is basically an extension of the lesson class.
+The nice thing is that can be loaded only if it is necessary (this setup can be modified)
+'''
 class Review(db.Model):
     __tablename__ = 'reviews'
     review_id = db.Column(db.Integer, primary_key=True)

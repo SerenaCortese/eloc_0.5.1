@@ -1,111 +1,89 @@
 {% extends "layout.html" %}
-{% block title %}done review{% endblock %}
+{% block title %}WRITTEN REVIEWS{% endblock %}
 
 {% block page_content %}
 
-{% if not reviews %}
+{% if not dict1 %}
 <p class="alert-danger"> There are no reviews</p>
 {% endif %}
 
-{% if reviews %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-
-            <table class="table table-hover">
-  <thead>
-    <tr>
-                <th scope="col">Tutor</th>
-
-    </tr>
-  </thead>
-                <tbody>
-                {%for t in tutors%}
-                <tr>
-                    <td>
-                        <a href="/user/{{t.username}}">{{t.username}}</a>
-                    </td>
-                </tr>
-
-
-                {% endfor %}
-
-
-                </tbody>
-            </table>
 
 
 
+
+{% if dict1 %}
+
+
+<div class="container text-left">
+    <div class="row ">
+
+
+        {% for l in lessons %}
+        {% if dict1[l.id] %}
+        <div class="col col-md-6  mb-3 ">
+            <div class="card">
+                <div class="card-header">
+                    Review
+                </div>
+                <div class="card-body">
+
+                    <p class="card-text">{{l.date}}</p>
+                    <p class="card-text">{{l.time}}</p>
+                    <p class="card-text text-uppercase">{{l.subject_name}}</p>
+                    <p class="card-text ">Tutor: <a href="/user/{{dict2[l.id]}}">{{dict2[l.id]}}</a></p>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <p class="card-text">Comment:</p>
+                    <p class="card-text">{{dict1[l.id].comment}}</p>
+
+
+
+                    <h4 class="card-text text-right  text-primary ">
+                        {% if dict1[l.id].score == 1 %}
+                        <span style="color:#fc0;">&#9733;</span>
+                        <span style="color:#ccc;">&#9733;&#9733;&#9733;&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 2 %}
+                        <span style="color:#fc0;">&#9733;&#9733;</span>
+                        <span style="color:#ccc;">&#9733;&#9733;&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 3 %}
+                        <span style="color:#fc0;">&#9733;&#9733;&#9733;</span>
+                        <span style="color:#ccc;">&#9733;&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 4 %}
+                        <span style="color:#fc0; padding: 0;"> &#9733;&#9733;&#9733;&#9733; </span>
+                        <span style="color:#ccc; padding: 0; margin: 0">&#9733;</span>
+                        {% endif %}
+                        {% if dict1[l.id].score == 5 %}
+                        <span style="color:#fc0;">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+
+                        {% endif %}
+                    </h4>
+
+
+
+                </div>
+
+
+            </div>
         </div>
-
-
-         <div class="col">
-
-
-
-
-                        <table class="table table-hover">
-  <thead>
-    <tr>
-                <th scope="col">Date</th>
-        <th>Subject</th>
-
-    </tr>
-  </thead>
-                <tbody>
-            {%for l in lessons%}
-            <tr>
-                <td>
-                    {{l.date}}
-                </td>
-                <td>
-                    {{l.subject_name}}
-                </td>
-            </tr>
-
-
-
-            {%endfor%}
-
-
-                </tbody>
-            </table>
-
-
-        </div>
-
-        <div class="col">
-
-            <table class="table table-hover">
-               <thead>
-               <tr>
-                   <th scope="col">Comment</th>
-                   <th scope="col">Score</th>
-               </tr>
-               </thead>
-                <tbody>
-                {%for r in reviews %}
-                <tr>
-                    <td>
-                        {{r.comment}}
-                    </td>
-                    <td>
-                        {{r.score}}
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-                </tbody>
-            </table>
-
-
-        </div>
+        {% endif %}
+        {% endfor %}
 
 
 
     </div>
 </div>
+
+
+
+
+
+
 {% endif %}
 
 

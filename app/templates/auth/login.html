@@ -1,42 +1,83 @@
 {% extends "layout.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}LOGIN{% endblock %}
+
+
+
+
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+<link href="{{ url_for('static/css', filename='signin.css') }}" rel="stylesheet">
+
+
 
 {% block page_content %}
 
-    <form method="post" action="{{ url_for('auth.login') }}">
-      {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-          <legend></legend>
-          <div class="form-group">
-              {{ form.email(class="form-control", placeholder="email") }}
-              {% if form.email.errors %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-3">
+
+
+    <form class="form-signin" method="post" action="{{ url_for('auth.login') }}">
+        {{ form.hidden_tag() }}
+  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        {{ form.email(id="inputEmail", class="form-control mb-1", placeholder="Email address") }}
+        {% if form.email.errors %}
                   {% for err in form.email.errors %}
-                      <span>{{ err }}</span>
+                      <span class="alert-danger">{{ err }}</span>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.password(placeholder="password", class="form-control") }}
-              {% if form.password.errors %}
+        {{ form.password(id="inputPassword", class="form-control mb-1", placeholder="Password") }}
+         {% if form.password.errors %}
                   {% for err in form.password.errors %}
-                      <span>{{ err }}</span>
+                      <span class="alert-danger">{{ err }}</span>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.remember_me }}
-              {{ form.remember_me.label }}
-              {% if form.remember_me.errors %}
+  <div class="checkbox mb-1">
+      {{ form.remember_me }}
+      {{ form.remember_me.label }}
+      {% if form.remember_me.errors %}
                   {% for err in form.remember_me.errors %}
-                      <span>{{ err }}</span>
+                      <span class="alert-danger">{{ err}}</span>
                   {% endfor %}
               {% endif %}
-          </div>
-          <div class="form-group">
-              {{ form.submit(class="btn btn-outline-success") }}
-          </div>
-      </fieldset>
-    </form>
+  </div>
+
+        {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+</form>
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
 
 {% endblock %}
+
+
+
+
+

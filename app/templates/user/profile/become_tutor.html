@@ -1,0 +1,198 @@
+{% extends "layout.html" %}
+
+{% block title %}BECOME TUTOR{% endblock %}
+
+{% block page_content %}
+
+
+
+
+
+
+{% if user.username %}
+
+
+
+
+
+
+                <form method="post" action="{{ url_for('auth.tutor_reg') }}" enctype="multipart/form-data" class="mt-5 border border-primary rounded">
+    {{ form.hidden_tag() }}
+
+
+
+
+
+
+
+
+
+
+    <div class="row ml-4 mr-2 mb-1">
+        <div class="col-2">
+            <div class="row ">
+            {{ form.degrees.label }}:
+            </div>
+            <div class="row ">
+            {{ form.degrees(class="rounded") }}
+            </div>
+        </div>
+
+        <div class="col-2 ml-2">
+            <div class="row">
+            {{ form.subjects.label }}:
+            </div>
+            <div class="row">
+            {{ form.subjects(class="rounded") }}
+            </div>
+        </div>
+        <div class="col mt-5">
+            {{form.pay_rate.label}}: {{form.pay_rate(placeholder="€0.0", class="rounded")}}
+        </div>
+    </div>
+
+    <div class="row mb-1 justify-content-center">
+        {% if form.degrees.errors %}
+                  {% for err in form.degrees.errors %}
+                      <div class="col alert-danger">{{ err }}</div>
+                  {% endfor %}
+              {% endif %}
+        {% if form.subjects.errors %}
+                  {% for err in form.subjects.errors %}
+                      <div class="col alert-danger">{{ err }}</div>
+                  {% endfor %}
+              {% endif %}
+
+    </div>
+
+
+
+        <div class="dropdown-divider border border-primary"></div>
+
+        <h4> Availability: </h4>
+
+
+        <div class="row ml-2 mr-2 mb-3 mt-3 justify-content-center">
+
+
+            <div class="col">
+                <div class="row">
+                    {{ form.mon_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.mon_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="row">
+                    {{ form.tue_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.tue_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="row">
+                    {{ form.wed_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.wed_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+
+
+            <div class="col">
+                <div class="row">
+                    {{ form.thu_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.thu_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+
+
+
+      <div class="col">
+                <div class="row">
+                    {{ form.fri_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.fri_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+
+
+    <div class="col">
+                <div class="row">
+                    {{ form.sat_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.sat_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+<div class="col">
+                <div class="row">
+                    {{ form.sun_av_hours_slot.label }}:
+                </div>
+                <div class="row">
+                    {{ form.sun_av_hours_slot(class="rounded") }}
+                </div>
+            </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+        <div class="row ml-2 mr-2 mb-2 justify-content-center">
+
+        {{form.submit(class="btn btn-primary")}}
+
+    </div>
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
